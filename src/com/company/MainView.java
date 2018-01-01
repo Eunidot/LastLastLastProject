@@ -357,8 +357,9 @@ public class MainView {
 		movieP.add(movieimgP);
 
 		movielblP.setLayout(new GridLayout(4,1));
-		movielblP.setOpaque(false);
-		movielblP.setBounds(290, 40, 290, 460);
+		// movielblP.setOpaque(false);
+		movielblP.setBackground(Color.pink);
+		movielblP.setBounds(290, 20, 290, 460);
 		// infoLbl 배치
 		for(int i=0;i<4;i++){
 			infoLbl[i] = new JLabel();
@@ -821,7 +822,7 @@ public class MainView {
 		diaSuc.setSize(500, 281);
 
 		sucP.setLayout(new BorderLayout());
-		sucimgLbl.setPreferredSize(new Dimension(600, 600));
+		sucimgLbl.setPreferredSize(new Dimension(500, 281));
 		sucimgLbl.setIcon(complete);
 		sucimgLbl.setText(null);
 		sucP.add(sucimgLbl);
