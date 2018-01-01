@@ -69,6 +69,8 @@ public class MainView {
 	ArrayList<String> syn = new ArrayList<String>(5); // 줄거리 배열리스트
 
 
+	protected Font movie_font;
+	
 	//---------------- 영화포스터 -----------------------------
 	String movieTitle = "신과함께";
 	ImageIcon movieImg1 = new ImageIcon("src/com/company/img/" + movieTitle + ".jpg"); // 포스터 이미지 배열리스트
@@ -337,26 +339,31 @@ public class MainView {
 
 
 		movieP.setLayout(null);
-		movieP.setBounds(100, 20, 600, 510);
-		movieP.setBackground(new Color(120,120,120,95));
+		movieP.setBounds(100, 50, 290, 400);
+		movieP.setBackground(new Color(81,81,81));
 
 		movieimgP.setLayout(new BorderLayout());
-		movieimgP.setBounds(20, 40, 250, 355);
+		movieimgP.setBounds(20, 20, 250, 355);
 		imgLbl.setPreferredSize(new Dimension(250,355));
 		imgLbl.setIcon(movieImg1);
 		imgLbl.setText(null);
 		movieimgP.add(imgLbl);
 		movieP.add(movieimgP);
 
+		
 		movielblP.setLayout(new GridLayout(4,1));
+		movielblP.setBounds(400, 0, 300, 510);
 		movielblP.setOpaque(false);
-		movielblP.setBounds(290, 40, 290, 460);
+		
+		movie_font = new Font("돋움", Font.ITALIC, 15); 
+		
 		// infoLbl 배치
 		for(int i=0;i<4;i++){
 			infoLbl[i] = new JLabel();
 		}
 
 		infoLbl[0].setText("영화제목 : " + movies.get(0).getTitle());
+		infoLbl[0].setFont(movie_font);
 		infoLbl[1].setText("장르 : " + movies.get(0).getGenre());
 		infoLbl[2].setText("출연 : " + movies.get(0).getActor());
 		infoLbl[3].setText("줄거리 : " + movies.get(0).getPlot());
@@ -365,7 +372,8 @@ public class MainView {
 			movielblP.add(infoLbl[i]);
 		}
 		
-		movieP.add(movielblP);
+		moviePanel.add(movielblP);
+		
 
 		btnP_movie.setLayout(new FlowLayout());
 		btnP_movie.setBounds(300, 540, 200, 50);
@@ -409,11 +417,11 @@ public class MainView {
 
 
 		movieP2.setLayout(null);
-		movieP2.setBounds(100, 20, 600, 510);
-		movieP2.setBackground(new Color(120,120,120,95));
+		movieP2.setBounds(100, 50, 290, 400);
+		movieP2.setBackground(new Color(81,81,81)); // 바탕색
 
 		movieimgP2.setLayout(new BorderLayout());
-		movieimgP2.setBounds(20, 40, 250, 355);
+		movieimgP2.setBounds(20, 20, 250, 355);
 
 		imgLbl2.setPreferredSize(new Dimension(250,355));
 		imgLbl2.setIcon(movieImg1);
@@ -423,7 +431,7 @@ public class MainView {
 
 
 		movielblP2.setLayout(new GridLayout(4,1));
-		movielblP2.setBounds(290, 40, 290, 460);
+		movielblP2.setBounds(400, 0, 300, 510);
 		movielblP2.setOpaque(false);
 		// infoLbl2 배치
 		for(int i=0;i<4;i++){
@@ -431,6 +439,7 @@ public class MainView {
 		}
 
 		infoLbl2[0].setText("영화제목 : " + genreMovies.get(0).getTitle());
+		infoLbl2[0].setFont(movie_font);
 		infoLbl2[1].setText("장르 : " + genreMovies.get(0).getGenre());
 		infoLbl2[2].setText("출연 : " + genreMovies.get(0).getActor());
 		infoLbl2[3].setText("줄거리 : " + genreMovies.get(0).getPlot());
@@ -439,9 +448,9 @@ public class MainView {
 			movielblP2.add(infoLbl2[i]);
 		}
 
-		movieP2.add(movielblP2);
+		recmovPanel.add(movielblP2);
 
-		movieP.add(movielblP);
+		
 
 		btnP_movie2.setLayout(new FlowLayout());
 		btnP_movie2.setBounds(300, 540, 200, 50);
