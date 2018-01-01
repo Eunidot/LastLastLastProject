@@ -23,8 +23,13 @@ public class MyActionListener {
     JspinnerChangeL cL = new JspinnerChangeL();
     private int[] sum = new int[12];
     SnackDAO snackDAO = new SnackDAO();
+    Ticket ticket = new Ticket();
+    TicketDAO ticketDAO = new TicketDAO();
+
     int aultTiketnum = 0;
     int studentTiketnum = 0;
+    String[] seatselect = new String[4];
+
     Movie curMovie = AppManager.getInstance().getDataManager().getMovie();
 
     int allPrice=0; // 총 결제 금액
@@ -181,7 +186,18 @@ public class MyActionListener {
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
+
                 mainView.card.show(mainView.tab, "snack");
+                String str=seatselect[0];
+                for(int i=1;i<4;i++) {
+                    if(seatselect[i]==null) continue;
+                    str=str+","+seatselect[i];
+                }
+                ticket.setCutomername(customer.id);
+                ticket.setSeletseat(str);
+                ticket.setTotalnum((int)mainView.aduSpi.getValue()+(int)mainView.stuSpi.getValue());
+                ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
+                ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -251,12 +267,14 @@ public class MyActionListener {
                 for(int i=0; i<50; i++) {
                     // 선택 될 때 마다 개수 증가
                     if(mainView.tBtn[i].isSelected()) {
+                        seatselect[selectcount]=mainView.tBtn[i].getText();
                         selectcount++;
                     }
                     // 성인티켓 매수와 학생 티켓매수 합과 선택된 좌석 개수가 같을 때
                     else if(selectcount==(aultTiketnum+studentTiketnum)) {
-                        System.out.println(selectcount);
                         mainView.btn_book[0].setEnabled(true);
+                        mainView.stuSpi.setEnabled(false);
+                        mainView.aduSpi.setEnabled(false);
                         for(int q=0; q<50; q++) {
                             if(!mainView.tBtn[q].isSelected()){
                                 mainView.tBtn[q].setEnabled(false); // 모든 버튼 비활성화
@@ -265,6 +283,8 @@ public class MyActionListener {
                     }
                     else if (selectcount<(aultTiketnum+studentTiketnum)) {
                         mainView.btn_book[0].setEnabled(false);
+                        mainView.stuSpi.setEnabled(true);
+                        mainView.aduSpi.setEnabled(true);
                         for(int z=0;z<50;z++) {
                             if(!mainView.tBtn[z].isSelected()){
                                 mainView.tBtn[z].setEnabled(true); // 모든 버튼 비활성화
@@ -295,6 +315,9 @@ public class MyActionListener {
                 int prevalue = (int)mainView.aduSpi.getPreviousValue();  // 티켓4개이상일때 올리기이전 값 저장
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 aultTiketnum = (int)mainView.aduSpi.getValue();
+                for(int j=0;j<50;j++) {
+                    mainView.tBtn[j].setEnabled(true);
+                }
                 //0이하로 내려가지 않게 함
                 if(mainView.aduSpi.getValue().equals(-1))
                     setZero(obj);
@@ -303,6 +326,11 @@ public class MyActionListener {
                     mainView.aduSpi.setValue(prevalue);
                     mainView.stuSpi.setValue(studentTiketnum);
                 }
+                else if(mainView.aduSpi.getValue().equals(0) && mainView.stuSpi.getValue().equals(0)){
+                    for(int i=0;i<50;i++) {
+                        mainView.tBtn[i].setEnabled(false);
+                    }
+                }
             }
 
             // 학생 예매티켓 개수 버튼
@@ -310,6 +338,9 @@ public class MyActionListener {
                 int prevalue = (int)mainView.stuSpi.getPreviousValue();
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 studentTiketnum = (int)mainView.stuSpi.getValue();
+                for(int j=0;j<50;j++) {
+                    mainView.tBtn[j].setEnabled(true);
+                }
                 //0이하로 내려가지 않게
                 if(mainView.stuSpi.getValue().equals(-1))
                     setZero(obj);
@@ -317,6 +348,11 @@ public class MyActionListener {
                 else if(hap>6) {
                     mainView.aduSpi.setValue(aultTiketnum);
                     mainView.stuSpi.setValue(prevalue);
+                }
+                else if(mainView.aduSpi.getValue().equals(0) && mainView.stuSpi.getValue().equals(0)) {
+                    for (int i = 0; i < 50; i++) {
+                        mainView.tBtn[i].setEnabled(false);
+                    }
                 }
             }
 
