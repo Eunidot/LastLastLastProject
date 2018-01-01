@@ -35,3 +35,5 @@ public class AppManager {
 
     public MainView getMainView() { return m_mainView; }
 }
+
+// 푸쉬용

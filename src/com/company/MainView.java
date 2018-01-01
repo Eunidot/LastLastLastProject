@@ -70,14 +70,6 @@ public class MainView {
 
 
 	protected Font movie_font;
-	
-	//---------------- 영화포스터 -----------------------------
-	String movieTitle = "신과함께";
-	ImageIcon movieImg1 = new ImageIcon("src/com/company/img/" + movieTitle + ".jpg"); // 포스터 이미지 배열리스트
-
-
-
-
 	// 추천영화 패널
 	private JPanel recmovPanel = new JPanel(){
 		public void paintComponent(Graphics g) {
@@ -101,9 +93,8 @@ public class MainView {
 	protected JLabel infoLbl2[] = new JLabel[4]; // 영화정보 라벨
 
 	protected ImageIcon prebtn2 = new ImageIcon("src/com/company/img/prebtn.png"); 
-	protected ImageIcon nextbtn2 = new ImageIcon("src/com/company/img/nextbtn.png"); 
+	protected ImageIcon nextbtn2 = new ImageIcon("src/com/company/img/nextbtn.png");
 
-	ImageIcon movieImg2 = new ImageIcon("./img/withgod.jpg"); // 포스터 이미지 배열리스트	
 	ArrayList<String> title2 = new ArrayList<String>(5); // 영화 타이틀  배열리스트
 	ArrayList<String> genre2 = new ArrayList<String>(5); // 장르 배열리스트
 	ArrayList<String> cast2 = new ArrayList<String>(5); // 등장인물 배열리스트
@@ -259,6 +250,12 @@ public class MainView {
 
 	//-------------------------------------------------------------------------------------------------------------------------------- 영화 테스트
 
+    //---------------- 영화포스터 -----------------------------
+    String movieTitle1 = movies.get(0).getTitle();
+    ImageIcon movieImg1 = new ImageIcon("src/com/company/img/" + movieTitle1 + ".jpg"); // 포스터 이미지 배열리스트
+
+    String movieTitle2 = genreMovies.get(0).getTitle();
+    ImageIcon movieImg2 = new ImageIcon("src/com/company/img/" + movieTitle2 + ".jpg"); // 포스터 이미지 배열리스트
 	// 생성자
 	public MainView(){
 
@@ -424,7 +421,7 @@ public class MainView {
 		movieimgP2.setBounds(20, 20, 250, 355);
 
 		imgLbl2.setPreferredSize(new Dimension(250,355));
-		imgLbl2.setIcon(movieImg1);
+		imgLbl2.setIcon(movieImg2);
 		imgLbl2.setText(null);
 		movieimgP2.add(imgLbl2);
 		movieP2.add(movieimgP2);

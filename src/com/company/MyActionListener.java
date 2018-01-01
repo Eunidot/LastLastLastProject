@@ -195,6 +195,7 @@ public class MyActionListener {
             // 영화 탭 버튼 클릭
             else if(obj == mainView.btnMovie) {
                 mainView.card.show(mainView.tab, "movie");
+                curMovie = mainView.movies.get(mainView.mIdx);
             }
             // 영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn) {
@@ -202,6 +203,7 @@ public class MyActionListener {
             }
             // 추천 영화 탭 클릭
             else if(obj == mainView.btnRecmov) {
+                curMovie = mainView.genreMovies.get(mainView.genreIdx);
                 mainView.card.show(mainView.tab, "recmovie");
             }
             // 추천영화 탭에서 예매하기 버튼 클릭시
@@ -331,6 +333,11 @@ public class MyActionListener {
             }
 
             mainView.titLbl.setText(curMovie.getTitle());
+            mainView.movieTitle1 = curMovie.getTitle();
+
+            mainView.imgLbl.setIcon(new ImageIcon("src/com/company/img/" + mainView.movieTitle1 + ".jpg"));
+            mainView.imgLbl2.setIcon(new ImageIcon("src/com/company/img/" + mainView.movieTitle1 + ".jpg"));
+
             mainView.imgL_pay.setIcon(new ImageIcon("src/com/company/img/" + curMovie.getTitle() + ".jpg"));
         }// actionPerformed()
 
