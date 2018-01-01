@@ -821,7 +821,7 @@ public class MainView {
 		diaSuc.setSize(500, 281);
 
 		sucP.setLayout(new BorderLayout());
-		sucimgLbl.setPreferredSize(new Dimension(500, 281));
+		sucimgLbl.setPreferredSize(new Dimension(600, 600));
 		sucimgLbl.setIcon(complete);
 		sucimgLbl.setText(null);
 		sucP.add(sucimgLbl);
@@ -885,4 +885,3 @@ public class MainView {
 	}
 
 }// MainView class
-
