@@ -1,0 +1,467 @@
+package com.company;
+
+import javafx.scene.control.Spinner;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.event.*;
+import java.sql.SQLOutput;
+
+public class MyActionListener {
+    LoginView loginView = new LoginView();
+    DataManager dataManager = new DataManager();
+    Customer customer = new Customer();
+    DAOManager daoManager = new DAOManager();
+    CustomerDAO customerDAO = new CustomerDAO();
+    SnackOrder snackOrder = new SnackOrder();
+    SnackOrderDAO snackOrderDAO = new SnackOrderDAO();
+    MainView mainView;
+    LoginActionL lL = new LoginActionL();
+    JoinActionL  jL = new JoinActionL();
+    MainViewActionL mL = new MainViewActionL();
+    JspinnerChangeL cL = new JspinnerChangeL();
+    private int[] sum = new int[12];
+    SnackDAO snackDAO = new SnackDAO();
+    int aultTiketnum = 0;
+    int studentTiketnum = 0;
+    Movie curMovie = AppManager.getInstance().getDataManager().getMovie();
+
+    int allPrice=0; // 총 결제 금액
+    String pString = "팝콘 : "; // 결제패널 팝콘 문자열
+    String bString = "음료 : "; // 결제패널 음료 문자열
+
+    public MyActionListener() {
+        AppManager.getInstance().setMyactionListener(this);
+    }
+    //---------------------------------------------------------------------------------------------로그인 화면에서의 액션리스너
+    class LoginActionL implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object obj =e.getSource();
+            //로그인 버튼
+            if(obj==loginView.btnLogin) {
+                customer.setId(loginView.tfLogin[0].getText());
+                customer.setPw(loginView.tfLogin[1].getText());
+                // DB에 있는 id와 pw가 일치
+                if(customerDAO.login()){
+                    System.out.println("로그인 성공");
+                    // 메인 뷰 보여주기
+                    mainView = new MainView();
+                    MainViewListenerSet();
+                    JSpinnerChangeListenerSet();
+                }
+                else
+                    System.out.println("로그인 실패");
+            }
+            //회원가입 버튼
+            else if(obj==loginView.btnJoin) {
+                loginView.joinUI();
+            }
+        } // actionPerformed()
+    } //LoginActionL class
+
+    //---------------------------------------------------------------------------------------------회원가입 화면에서 액션리스너
+    class JoinActionL implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object obj = e.getSource();
+            //가입 버튼
+            if (obj == loginView.btn[0]) {
+                // 회원 정보 객체에 담기
+                customer.setId(loginView.tfJoin[0].getText());
+                customer.setPw(loginView.tfJoin[1].getText());
+                customer.setName(loginView.tfJoin[2].getText());
+                customer.setTel(loginView.tfJoin[3].getText());
+                for(int i=0;i<6;i++){
+                    if(loginView.rb[i].isSelected()){
+                        customer.setGenre(loginView.rb[i].getText());
+                    }
+                }
+
+                // 회원 가입
+                customerDAO.newCustomer();
+
+                // 회원 가입 후 화면 끄기
+                loginView.diaJoin.dispose();
+
+                loginView.diaNoti.showMessageDialog(loginView.frame, "회원가입이 완료되었습니다.", "안내",loginView.diaNoti.INFORMATION_MESSAGE );
+            }
+            //취소 버튼
+            else if (obj == loginView.btn[1]) {
+                loginView.diaJoin.dispose();
+                System.out.println("취소버튼");
+            }
+            //중복확인 버튼
+            else if (obj == loginView.btn[2]) {
+                customer.setId(loginView.tfJoin[0].getText());
+                if (customerDAO.idCheck()) {
+                    System.out.println("회원 가입 가능");
+                    loginView.btn[0].setEnabled(true);
+                    loginView.diaNoti.showMessageDialog(loginView.diaJoin, "회원 가입이 가능한 아이디입니다.", "안내",loginView.diaNoti.INFORMATION_MESSAGE );
+                    System.out.println("중복확인 버튼");
+                } else
+                	loginView.diaNoti.showMessageDialog(loginView.diaJoin, "이미 있는 아이디입니다.", "안내",loginView.diaNoti.ERROR_MESSAGE );
+                    System.out.println("이미 있는 아이디 입니다.");
+            }
+        } //actionPerformed()
+    } //JoinActionL class
+
+    //------------------------------------------------------------------------------------------------메인 뷰에서의 액션리스너
+    class MainViewActionL implements ActionListener {
+
+        // 어떤 버튼에서 액션이 일어났는지 알기위해 obj를 받아와 for문으로 비교해가며 찾음
+        public boolean Istogglebtn (Object obj) {
+            boolean flag = false;
+            for(int j=0; j<50;j++) {
+                if(obj==mainView.tBtn[j]) flag=true;
+            }
+            return flag;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object obj = e.getSource();
+
+            // 영화패널 > 버튼
+            if(obj == mainView.nextBtn) {
+                mainView.mIdx++;
+                // 영화 끝으로 도달했을때 다시 처음으로 돌리기
+                if(mainView.mIdx == mainView.movies.size())
+                    mainView.mIdx -= mainView.movies.size();
+
+               mainView.testLbl.setText(mainView.movies.get(mainView.mIdx).getTitle());
+            }
+
+            // 영화패널 < 버튼
+            else if(obj == mainView.preBtn){
+                mainView.mIdx--;
+                // 영화 처음에서 < 버튼 클릭시 마지막 영화로 돌리기
+                if(mainView.mIdx == -1)
+                    mainView.mIdx += mainView.movies.size();
+
+                mainView.testLbl.setText(mainView.movies.get(mainView.mIdx).getTitle());
+            }
+
+            // 추천영화패널 > 버튼
+            else if(obj == mainView.nextBtn2) {
+                mainView.genreIdx++;
+                // 영화 끝으로 도달했을때 다시 처음으로 돌리기
+                if(mainView.genreIdx == mainView.genreMovies.size())
+                    mainView.genreIdx -= mainView.genreMovies.size();
+
+                mainView.testLbl2.setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+            }
+
+            // 추천영화패널 < 버튼
+            else if(obj == mainView.preBtn2){
+                mainView.genreIdx--;
+                // 영화 끝으로 도달했을때 다시 처음으로 돌리기
+                if(mainView.genreIdx == -1)
+                    mainView.genreIdx += mainView.genreMovies.size();
+
+                mainView.testLbl2.setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+            }
+
+            // 영화 탭 버튼 클릭
+            else if(obj == mainView.btnMovie) {
+                mainView.card.show(mainView.tab, "movie");
+            }
+            // 영화 탭에서 예매하기 버튼 클릭시
+            else if(obj == mainView.bookBtn) {
+                mainView.card.show(mainView.tab, "book");
+            }
+            // 추천 영화 탭 클릭
+            else if(obj == mainView.btnRecmov) {
+                mainView.card.show(mainView.tab, "recmovie");
+            }
+            // 추천영화 탭에서 예매하기 버튼 클릭시
+            else if(obj == mainView.bookBtn2) {
+                mainView.card.show(mainView.tab, "book");
+            }
+            // 예매 화면에서 선택 버튼 클릭 시
+            else if(obj == mainView.btn_book[0]) {
+                mainView.card.show(mainView.tab, "snack");
+            }
+            // 예매 화면에서 취소 버튼 클릭 시
+            else if(obj == mainView.btn_book[1]) {
+                mainView.card.show(mainView.tab, "movie");
+                mainView.btn_book[0].setEnabled(false);
+                mainView.aduSpi.setValue(0);
+                mainView.stuSpi.setValue(0);
+                for(int l=0;l<50;l++) {
+                    mainView.tBtn[l].setSelected(false);
+                    mainView.tBtn[l].setEnabled(true);
+                }
+            }
+            // 매점 탭 클릭시
+            else if(obj == mainView.btnSnack) {
+                mainView.card.show(mainView.tab, "snack");
+            }
+            // 매점 탭에서 확인 버튼 클릭 시
+            else if(obj == mainView.btn_snack[0]) {
+                for(int i=0;i<4;i++){
+                    if(!mainView.menu2[i].getValue().equals(0)){
+                        pString = pString + mainView.pName[i] + " " + mainView.menu2[i].getValue() + "개 ";
+                    }
+                }
+                mainView.infoL_pay[1].setText(pString); // 팝콘 문자열 부분 변경
+                snackOrder.setPSnackID(pString);
+
+
+                for(int i=0;i<4;i++){
+                    if(!mainView.menu4[i].getValue().equals(0)) {
+                        bString = bString + mainView.bName[i] + " " + mainView.menu4[i].getValue() + "개 ";
+                    }
+                }
+                for(int i=0;i<4;i++){
+                    if(!mainView.menu6[i].getValue().equals(0)) {
+                        bString = bString + mainView.bName[i+4] + " " + mainView.menu6[i].getValue() + "개 ";
+                    }
+                }
+                mainView.infoL_pay[2].setText(bString); // 음료 문자열 부분 변경
+                snackOrder.setBSnackID(bString);
+
+                // 매점 구입내역 DB에 저장
+                snackOrderDAO.newSnackOrder();
+
+                mainView.infoL_pay[3].setText("* 총 결제 금액 : " + String.valueOf(allPrice) + "원");
+                mainView.card.show(mainView.tab, "pay");
+            }
+            // 매점 탭에서 건너뛰기 버튼 클릭 시
+            else if(obj == mainView.btn_snack[1]) {
+                mainView.card.show(mainView.tab, "pay");
+            }
+            // 결제 탭 클릭시
+            else if(obj == mainView.btnPay) {
+                mainView.card.show(mainView.tab, "pay");
+            }
+            // 결제 탭에서 결제하기 버튼 클릭 시
+            else if(obj == mainView.btn_pay[0]) {
+                mainView.diaSuc.setVisible(true);
+                mainView.card.show(mainView.tab, "movie");
+            }
+            // 결제 탭에서 취소 버튼 클릭 시
+            else if(obj == mainView.btn_pay[1]) {
+                mainView.card.show(mainView.tab, "movie");
+            }
+            // 좌석 선택하는 좌석 버튼들
+            else if(Istogglebtn(obj)) {
+                int selectcount =0; //버튼을 선택 한 개수
+                for(int i=0; i<50; i++) {
+                    // 선택 될 때 마다 개수 증가
+                    if(mainView.tBtn[i].isSelected()) {
+                        selectcount++;
+                    }
+                    // 성인티켓 매수와 학생 티켓매수 합과 선택된 좌석 개수가 같을 때
+                    else if(selectcount==(aultTiketnum+studentTiketnum)) {
+                        System.out.println(selectcount);
+                        mainView.btn_book[0].setEnabled(true);
+                        for(int q=0; q<50; q++) {
+                            if(!mainView.tBtn[q].isSelected()){
+                                mainView.tBtn[q].setEnabled(false); // 모든 버튼 비활성화
+                            }
+                        }
+                    }
+                    else if (selectcount<(aultTiketnum+studentTiketnum)) {
+                        mainView.btn_book[0].setEnabled(false);
+                        for(int z=0;z<50;z++) {
+                            if(!mainView.tBtn[z].isSelected()){
+                                mainView.tBtn[z].setEnabled(true); // 모든 버튼 비활성화
+                            }
+                        }
+                    }
+                }
+            } // togglebuttonAction
+
+            // 결제 수단을 선택 했을 때 결제하기 버튼 활성화
+            for(int i=0;i<3;i++){
+                if(mainView.rb[i].isSelected()){
+                    mainView.btn_pay[0].setEnabled(true);
+                }
+            }
+        }// actionPerformed()
+    }// MainViewActionL class
+    //------------------------------------------------------------------------------------매점 뷰에서 메뉴 갯수에 대한 가격 리스너
+    class JspinnerChangeL implements ChangeListener {
+        int hap =0;
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            Object obj = e.getSource();
+            int allprice = 0;
+
+            // 성인 예매티켓 개수 버튼
+            if(obj == mainView.aduSpi) {
+                int prevalue = (int)mainView.aduSpi.getPreviousValue();  // 티켓4개이상일때 올리기이전 값 저장
+                hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
+                aultTiketnum = (int)mainView.aduSpi.getValue();
+                //0이하로 내려가지 않게 함
+                if(mainView.aduSpi.getValue().equals(-1))
+                    setZero(obj);
+                    //총 티켓수가 4개일때
+                else if(hap>6) {
+                    mainView.aduSpi.setValue(prevalue);
+                    mainView.stuSpi.setValue(studentTiketnum);
+                }
+            }
+
+            // 학생 예매티켓 개수 버튼
+            else if (obj == mainView.stuSpi) {
+                int prevalue = (int)mainView.stuSpi.getPreviousValue();
+                hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
+                studentTiketnum = (int)mainView.stuSpi.getValue();
+                //0이하로 내려가지 않게
+                if(mainView.stuSpi.getValue().equals(-1))
+                    setZero(obj);
+                    //총 티켓 수가 4개 일때
+                else if(hap>6) {
+                    mainView.aduSpi.setValue(aultTiketnum);
+                    mainView.stuSpi.setValue(prevalue);
+                }
+            }
+
+            // 고소팝콘M 개수 버튼
+            else if(obj == mainView.menu2[0]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu2[0].getValue().equals(-1)){
+                    setZero(obj);
+                }
+                sum[0] = snackDAO.getPrice("고소팝콘M",(int)mainView.menu2[0].getValue());
+            }
+
+            // 고소팝콘L 개수 버튼
+            else if (obj == mainView.menu2[1]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu2[1].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[1] = snackDAO.getPrice("고소팝콘L",(int)mainView.menu2[1].getValue());
+            }
+
+            // 달콤팝콘M 개수 버튼
+            else if (obj == mainView.menu2[2]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu2[2].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[2] = snackDAO.getPrice("달콤팝콘M",(int)mainView.menu2[2].getValue());
+            }
+
+            // 달콤팝콘L 개수 버튼
+            else if (obj == mainView.menu2[3]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu2[3].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[3] = snackDAO.getPrice("달콤팝콘L",(int)mainView.menu2[3].getValue());
+            }
+
+            // 콜라M 개수 버튼
+            else if (obj == mainView.menu4[0]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu4[0].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[4] = snackDAO.getPrice("콜라M",(int)mainView.menu4[0].getValue());
+            }
+
+            // 콜라L 개수 버튼
+            else if (obj == mainView.menu4[1]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu4[1].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[5] = snackDAO.getPrice("콜라L",(int)mainView.menu4[1].getValue());
+            }
+
+            // 사이다M 개수 버튼
+            else if (obj == mainView.menu4[2]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu4[2].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[6] = snackDAO.getPrice("사이다M",(int)mainView.menu4[2].getValue());
+            }
+
+            // 사이다L 개수 버튼
+            else if (obj == mainView.menu4[3]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu4[3].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[7] = snackDAO.getPrice("사이다L",(int)mainView.menu4[3].getValue());
+            }
+
+            // 자몽에이드M 개수 버튼
+            else if (obj == mainView.menu6[0]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu6[0].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[8] = snackDAO.getPrice("자몽에이드M",(int)mainView.menu6[0].getValue());
+            }
+
+            // 자몽에이드L 개수 버튼
+            else if (obj == mainView.menu6[1]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu6[1].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[9] = snackDAO.getPrice("자몽에이드L",(int)mainView.menu6[1].getValue());
+            }
+
+            // 오렌지에이드M 개수 버튼
+            else if (obj == mainView.menu6[2]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu6[2].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[10] = snackDAO.getPrice("오렌지에이드M",(int)mainView.menu6[2].getValue());
+            }
+
+            // 오렌지에이드L 개수 버튼
+            else if (obj == mainView.menu6[3]) {
+                // 0일때 더 낮게 선택 못함
+                if(mainView.menu6[3].getValue().equals(-1))
+                    setZero(obj);
+
+                sum[11] = snackDAO.getPrice("오렌지에이드L",(int)mainView.menu6[3].getValue());
+            }
+
+            // 현재 선택한 메뉴의 총 가격
+            for(int i=0;i<12;i++) allprice = allprice + sum[i];
+
+            // 1개 이상 메뉴 선택시 확인 버튼 활성화
+            if(allprice > 0 )
+                mainView.btn_snack[0].setEnabled(true);
+            else
+                mainView.btn_snack[0].setEnabled(false);
+
+
+            mainView.currentPay.setText("현재 금액 : " + allprice + " 원");
+            allPrice = allprice;
+
+        }
+    }//JspinnerChangeL class
+
+    // 0보다 더 낮게 선택 못함
+    public void setZero(Object menu){
+        JSpinner js = (JSpinner)menu;
+        if(js.getValue().equals(-1)){
+            js.setValue(0);
+        }
+    }
+
+    public void LoginListenerSet() {
+        loginView.addListenerLogin(lL);
+    } //ListenerSet()
+    public void JoinListenerSet() {
+        loginView.addLisenerJoin(jL);
+    }
+    public void MainViewListenerSet() {
+        mainView.addListenerMain(mL);
+    }
+    public void JSpinnerChangeListenerSet() {
+        mainView.addChangeListenerMain(cL);
+    }
+}//MyActionListener class
