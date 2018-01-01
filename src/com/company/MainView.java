@@ -357,9 +357,8 @@ public class MainView {
 		movieP.add(movieimgP);
 
 		movielblP.setLayout(new GridLayout(4,1));
-		// movielblP.setOpaque(false);
-		movielblP.setBackground(Color.pink);
-		movielblP.setBounds(290, 20, 290, 460);
+		movielblP.setOpaque(false);
+		movielblP.setBounds(290, 40, 290, 460);
 		// infoLbl 배치
 		for(int i=0;i<4;i++){
 			infoLbl[i] = new JLabel();
