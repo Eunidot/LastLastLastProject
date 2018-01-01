@@ -557,6 +557,14 @@ public class MainView {
 		// tBtn 배치
 		for(int i=0;i<50;i++){
 			tBtn[i] = new JToggleButton();
+			//버튼마다 좌석번호 set
+			if(i/10==0) {tBtn[i].setText("A"+(i+1));}
+			else if(i/10==1) {tBtn[i].setText("B"+(i%10+1));}
+			else if(i/10==2) {tBtn[i].setText("C"+(i%10+1));}
+			else if(i/10==3) {tBtn[i].setText("D"+(i%10+1));}
+			else if(i/10==4) {tBtn[i].setText("E"+(i%10+1));}
+			tBtn[i].setEnabled(false);
+			tBtn[i].setForeground(Color.white);
 		}
 
 
