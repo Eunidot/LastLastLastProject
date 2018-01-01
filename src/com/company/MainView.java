@@ -418,7 +418,7 @@ public class MainView {
 
 		movieP2.setLayout(null);
 		movieP2.setBounds(100, 50, 290, 400);
-		movieP2.setBackground(new Color(81,81,81));
+		movieP2.setBackground(new Color(81,81,81)); // 바탕색
 
 		movieimgP2.setLayout(new BorderLayout());
 		movieimgP2.setBounds(20, 20, 250, 355);
