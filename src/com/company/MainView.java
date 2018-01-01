@@ -67,6 +67,8 @@ public class MainView {
 	ArrayList<String> genre = new ArrayList<String>(5); // 장르 배열리스트
 	ArrayList<String> cast = new ArrayList<String>(5); // 등장인물 배열리스트
 	ArrayList<String> syn = new ArrayList<String>(5); // 줄거리 배열리스트
+	
+	protected Font movie_font;
 
 
 	//---------------- 영화포스터 -----------------------------
@@ -363,8 +365,11 @@ public class MainView {
 		for(int i=0;i<4;i++){
 			infoLbl[i] = new JLabel();
 		}
+		
+		movie_font = new Font("돋움", Font.BOLD, 20); 
 
 		infoLbl[0].setText("영화제목");
+		infoLbl[0].setFont(movie_font);
 		infoLbl[1].setText("장르 : ");
 		infoLbl[2].setText("출연 : ");
 		infoLbl[3].setText("줄거리 : ");
@@ -445,6 +450,7 @@ public class MainView {
 		}
 
 		infoLbl2[0].setText("영화제목");
+		infoLbl2[0].setFont(movie_font);
 		infoLbl2[1].setText("장르 : ");
 		infoLbl2[2].setText("출연 : ");
 		infoLbl2[3].setText("줄거리 : ");
