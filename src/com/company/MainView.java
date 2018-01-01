@@ -125,10 +125,9 @@ public class MainView {
 	private JPanel areaP = new JPanel(); // A~E 구역 라벨 패널
 	private JPanel numareaP = new JPanel(); // 1~10 구역 라벨 패널
 
-	
 	protected JLabel aduLbl = new JLabel("성인"); // 성인 라벨
 	protected JLabel stuLbl = new JLabel("청소년"); // 청소년 라벨
-	protected JLabel titLbl = new JLabel("신과함께-죄와 벌"); // 영화제목 라벨
+	protected JLabel titLbl = new JLabel("영화 제목"); // 영화제목 라벨
     protected JLabel scrLbl = new JLabel(); // 스크린 이미지 넣을 라벨
 	
 	protected JSpinner aduSpi = new JSpinner(); // 성인 수 세는 스피너
@@ -211,11 +210,11 @@ public class MainView {
 		}
 	}; // 결제 패널
 	private JPanel btnP_pay = new JPanel(); // 결제하기, 취소 버튼 넣을 패널
-	private JPanel imgP_pay = new JPanel(); // 영화 포스터 이미지 넣을 패널
+	protected JPanel imgP_pay = new JPanel(); // 영화 포스터 이미지 넣을 패널
 	private JPanel infoP_pay = new JPanel(); // 결제 정보 라벨 넣을 패널
 	private JPanel radioP_pay = new JPanel(); // 결제 수단 레디오 버튼 넣을 패널
 
-	protected JLabel imgL_pay = new JLabel("영화이미지넣을라벨"); // 영화 포스터 이미지 라벨 
+	protected JLabel imgL_pay = new JLabel(""); // 영화 포스터 이미지 라벨
 	protected JLabel infoL_pay[] = new JLabel[4]; // 영화 결제 정보 라벨
 
 	protected JRadioButton rb[] = {new JRadioButton("신용카드"), new JRadioButton("현금"),new JRadioButton("문화상품권")};
@@ -232,7 +231,7 @@ public class MainView {
 	String stuN=""; // 청소년 수
 	String comPay=""; // 총 결제 금액
 	
-	protected ImageIcon pay = new ImageIcon("src/com/company/img/pay.png"); 
+	protected ImageIcon pay = new ImageIcon("src/com/company/img/pay.png");
 	protected ImageIcon cancel_pay = new ImageIcon("src/com/company/img/cancel_pay.png"); 
 
 	protected ImageIcon complete = new ImageIcon("src/com/company/img/complete.gif"); 
@@ -253,8 +252,6 @@ public class MainView {
 	// 모든 영화의 ArrayList
 	ArrayList<Movie> movies = movieDAO.getAll();
 	ArrayList<Movie> genreMovies = movieDAO.getGenreAll(customer.getGenre());
-	JLabel testLbl;
-	JLabel testLbl2;
 	int mIdx=0;
 	int genreIdx=0;
 
@@ -262,6 +259,7 @@ public class MainView {
 
 	// 생성자
 	public MainView(){
+
 		AppManager.getInstance().setMainView(this);
 
 		frame2.setTitle("CINEMA PARADISO");
@@ -341,12 +339,6 @@ public class MainView {
 		movieP.setLayout(null);
 		movieP.setBounds(100, 20, 600, 510);
 		movieP.setBackground(new Color(120,120,120,95));
-		
-		// 영화 제목 라벨
-		testLbl = new JLabel(movies.get(0).getTitle());
-		testLbl.setBounds(250, 0, 200, 40);
-		movieP.add(testLbl);
-		
 
 		movieimgP.setLayout(new BorderLayout());
 		movieimgP.setBounds(20, 40, 250, 355);
@@ -364,10 +356,10 @@ public class MainView {
 			infoLbl[i] = new JLabel();
 		}
 
-		infoLbl[0].setText("영화제목");
-		infoLbl[1].setText("장르 : ");
-		infoLbl[2].setText("출연 : ");
-		infoLbl[3].setText("줄거리 : ");
+		infoLbl[0].setText("영화제목 : " + movies.get(0).getTitle());
+		infoLbl[1].setText("장르 : " + movies.get(0).getGenre());
+		infoLbl[2].setText("출연 : " + movies.get(0).getActor());
+		infoLbl[3].setText("줄거리 : " + movies.get(0).getPlot());
 
 		for(int i=0;i<4;i++){
 			movielblP.add(infoLbl[i]);
@@ -420,12 +412,6 @@ public class MainView {
 		movieP2.setBounds(100, 20, 600, 510);
 		movieP2.setBackground(new Color(120,120,120,95));
 
-
-		// 영화 제목 라벨
-		testLbl2 = new JLabel(genreMovies.get(genreIdx).getTitle());
-		testLbl2.setBounds(250, 0, 200, 40);
-		movieP2.add(testLbl2);
-
 		movieimgP2.setLayout(new BorderLayout());
 		movieimgP2.setBounds(20, 40, 250, 355);
 
@@ -444,10 +430,10 @@ public class MainView {
 			infoLbl2[i] = new JLabel();
 		}
 
-		infoLbl2[0].setText("영화제목");
-		infoLbl2[1].setText("장르 : ");
-		infoLbl2[2].setText("출연 : ");
-		infoLbl2[3].setText("줄거리 : ");
+		infoLbl2[0].setText("영화제목 : " + genreMovies.get(0).getTitle());
+		infoLbl2[1].setText("장르 : " + genreMovies.get(0).getGenre());
+		infoLbl2[2].setText("출연 : " + genreMovies.get(0).getActor());
+		infoLbl2[3].setText("줄거리 : " + genreMovies.get(0).getPlot());
 
 		for(int i=0;i<4;i++){
 			movielblP2.add(infoLbl2[i]);
@@ -841,7 +827,6 @@ public class MainView {
 		card.show(tab, "movie");
 		frame2.add(tab, BorderLayout.CENTER);
 		frame2.setVisible(true);
-
 	}// MainView()
 
 	public void addListenerMain (ActionListener listener) {

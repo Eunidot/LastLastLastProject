@@ -30,7 +30,7 @@ public class MyActionListener {
     int studentTiketnum = 0;
     String[] seatselect = new String[4];
 
-    Movie curMovie = AppManager.getInstance().getDataManager().getMovie();
+    Movie curMovie = new Movie();
 
     int allPrice=0; // 총 결제 금액
     String pString = "팝콘 : "; // 결제패널 팝콘 문자열
@@ -135,7 +135,13 @@ public class MyActionListener {
                 if(mainView.mIdx == mainView.movies.size())
                     mainView.mIdx -= mainView.movies.size();
 
-               mainView.testLbl.setText(mainView.movies.get(mainView.mIdx).getTitle());
+                // > 버튼 클릭시 영화 정보 변경
+                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
+                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+
+                curMovie = mainView.movies.get(mainView.mIdx);
             }
 
             // 영화패널 < 버튼
@@ -145,7 +151,13 @@ public class MyActionListener {
                 if(mainView.mIdx == -1)
                     mainView.mIdx += mainView.movies.size();
 
-                mainView.testLbl.setText(mainView.movies.get(mainView.mIdx).getTitle());
+                // < 버튼 클릭시 영화 정보 변경
+                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
+                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+
+                curMovie = mainView.movies.get(mainView.mIdx);
             }
 
             // 추천영화패널 > 버튼
@@ -155,7 +167,13 @@ public class MyActionListener {
                 if(mainView.genreIdx == mainView.genreMovies.size())
                     mainView.genreIdx -= mainView.genreMovies.size();
 
-                mainView.testLbl2.setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                // > 버튼 클릭시 영화 정보 변경
+                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
+                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+
+                curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
 
             // 추천영화패널 < 버튼
@@ -165,7 +183,13 @@ public class MyActionListener {
                 if(mainView.genreIdx == -1)
                     mainView.genreIdx += mainView.genreMovies.size();
 
-                mainView.testLbl2.setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                // < 버튼 클릭시 영화 정보 변경
+                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
+                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+
+                curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
 
             // 영화 탭 버튼 클릭
@@ -305,7 +329,11 @@ public class MyActionListener {
                     mainView.btn_pay[0].setEnabled(true);
                 }
             }
+
+            mainView.titLbl.setText(curMovie.getTitle());
+            mainView.imgL_pay.setIcon(new ImageIcon("src/com/company/img/" + curMovie.getTitle() + ".jpg"));
         }// actionPerformed()
+
     }// MainViewActionL class
     //------------------------------------------------------------------------------------매점 뷰에서 메뉴 갯수에 대한 가격 리스너
     class JspinnerChangeL implements ChangeListener {

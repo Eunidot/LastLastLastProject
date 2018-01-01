@@ -3,6 +3,8 @@ package com.company;
 public class Movie {
     private String title;
     private String genre;
+    private String actor;
+    private String plot;
 
     Movie(){
         AppManager.getInstance().getDataManager().setMovie(this);
@@ -15,6 +17,12 @@ public class Movie {
     public String  getGenre(){
         return genre;
     }
+    public String  getActor(){
+        return actor;
+    }
+    public String  getPlot(){
+        return plot;
+    }
 
     // set 메소드
     public void setTitle(String title){
@@ -22,5 +30,11 @@ public class Movie {
     }
     public void setGenre(String genre){
         this.genre = genre;
+    }
+    public void setActor(String actor){
+        this.actor = actor;
+    }
+    public void setPlot(String plot){
+        this.plot = plot;
     }
 }
