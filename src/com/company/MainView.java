@@ -564,7 +564,7 @@ public class MainView {
 			else if(i/10==3) {tBtn[i].setText("D"+(i%10+1));}
 			else if(i/10==4) {tBtn[i].setText("E"+(i%10+1));}
 			tBtn[i].setEnabled(false);
-			tBtn[i].setForeground(Color.white);
+			tBtn[i].setForeground(Color.black);
 		}
 
 

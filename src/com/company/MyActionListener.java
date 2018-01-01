@@ -198,6 +198,7 @@ public class MyActionListener {
                 ticket.setTotalnum((int)mainView.aduSpi.getValue()+(int)mainView.stuSpi.getValue());
                 ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
                 ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+                mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -224,7 +225,6 @@ public class MyActionListener {
                 mainView.infoL_pay[1].setText(pString); // 팝콘 문자열 부분 변경
                 snackOrder.setPSnackID(pString);
 
-
                 for(int i=0;i<4;i++){
                     if(!mainView.menu4[i].getValue().equals(0)) {
                         bString = bString + mainView.bName[i] + " " + mainView.menu4[i].getValue() + "개 ";
@@ -242,11 +242,16 @@ public class MyActionListener {
                 snackOrderDAO.newSnackOrder();
 
                 mainView.infoL_pay[3].setText("* 총 결제 금액 : " + String.valueOf(allPrice) + "원");
+                mainView.infoL_pay[0].setText("티켓 수 : 성인 " + aultTiketnum +"명, 청소년 " + studentTiketnum +"명");
                 mainView.card.show(mainView.tab, "pay");
             }
             // 매점 탭에서 건너뛰기 버튼 클릭 시
             else if(obj == mainView.btn_snack[1]) {
+                mainView.infoL_pay[3].setText("* 총 결제 금액 : " + ticket.getTotalprice() + "원");
+                mainView.infoL_pay[0].setText("티켓 수 : 성인 " + aultTiketnum +"명, 청소년 " + studentTiketnum +"명");
                 mainView.card.show(mainView.tab, "pay");
+
+
             }
             // 결제 탭 클릭시
             else if(obj == mainView.btnPay) {
@@ -305,10 +310,11 @@ public class MyActionListener {
     //------------------------------------------------------------------------------------매점 뷰에서 메뉴 갯수에 대한 가격 리스너
     class JspinnerChangeL implements ChangeListener {
         int hap =0;
+
         @Override
         public void stateChanged(ChangeEvent e) {
             Object obj = e.getSource();
-            int allprice = 0;
+            int allprice = ticket.getTotalprice();
 
             // 성인 예매티켓 개수 버튼
             if(obj == mainView.aduSpi) {
