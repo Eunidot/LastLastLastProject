@@ -20,6 +20,7 @@ public class MainView {
 	protected JButton btnSnack = new JButton("매점"); // 매점 탭 버튼
 	protected JButton btnPay = new JButton("결제"); // 결제 탭 버튼
 
+
 	protected ImageIcon movietab = new ImageIcon("src/com/company/img/movietab.png"); 
 	protected ImageIcon recmovtab = new ImageIcon("src/com/company/img/recmovietab.png"); 
 	protected ImageIcon snacktab = new ImageIcon("src/com/company/img/snacktab.png"); 
@@ -295,6 +296,7 @@ public class MainView {
 		btnPay.setText(null);
 		btnPay.setBorderPainted(false); // 버튼 테두리 없이
 		btnPay.setContentAreaFilled(false); // 여백 없이
+		btnPay.setEnabled(false);
 
 		tabPanel.add(btnMovie);
 		tabPanel.add(btnRecmov);
