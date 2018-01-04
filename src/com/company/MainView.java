@@ -76,6 +76,7 @@ public class MainView {
 	ArrayList<String> syn = new ArrayList<String>(5); // 줄거리 배열리스트
 
 	protected Font movie_font;
+	protected Font info_font;
 
 	protected JTextArea ta[] = new JTextArea[3];
 
@@ -396,6 +397,7 @@ public class MainView {
 		movielblP.setOpaque(false);
 
 		movie_font = new Font("돋움", Font.ITALIC, 15); 
+		info_font = new Font("돋움", Font.PLAIN, 15); 
 
 		// infoLbl 배치
 		for(int i=0;i<3;i++){
@@ -415,7 +417,7 @@ public class MainView {
 
 		//---------------------movielblP_2 이부분이 textarea인데 장르, 출연 넣을 때는 \n 사용해서 줄 맞춰주시면 될 것 같아요!!---------------
 		movielblP_2.setLayout(new GridLayout(3,1));
-		movielblP_2.setBounds(500, 60, 200, 331);
+		movielblP_2.setBounds(500, 50, 200, 331);
 		movielblP_2.setOpaque(false);
 
 		for(int i=0; i<3; i++) {
