@@ -36,6 +36,8 @@ public class MyActionListener {
     String pString = "팝콘 : "; // 결제패널 팝콘 문자열
     String bString = "음료 : "; // 결제패널 음료 문자열
 
+    APIMovie apiMovie = new APIMovie();
+
     public MyActionListener() {
         AppManager.getInstance().setMyactionListener(this);
     }
@@ -144,10 +146,10 @@ public class MyActionListener {
                     mainView.mIdx -= mainView.movies.size();
 
                 // > 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
-                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
-                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
-                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+                mainView.ta[0].setText(mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.movies.get(mainView.mIdx);
             }
@@ -160,10 +162,10 @@ public class MyActionListener {
                     mainView.mIdx += mainView.movies.size();
 
                 // < 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
-                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
-                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
-                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+                mainView.ta[0].setText(mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.movies.get(mainView.mIdx);
             }
@@ -176,10 +178,10 @@ public class MyActionListener {
                     mainView.genreIdx -= mainView.genreMovies.size();
 
                 // > 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
-                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
-                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+                mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
@@ -192,10 +194,10 @@ public class MyActionListener {
                     mainView.genreIdx += mainView.genreMovies.size();
 
                 // < 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
-                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
-                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+                mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
@@ -232,6 +234,9 @@ public class MyActionListener {
                 ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
                 ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
                 mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+
+                mainView.btnMovie.setEnabled(false);
+                mainView.btnRecmov.setEnabled(false);
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -277,6 +282,11 @@ public class MyActionListener {
                 mainView.infoL_pay[3].setText("* 총 결제 금액 : " + String.valueOf(allPrice) + "원");
                 mainView.infoL_pay[0].setText("티켓 수 : 성인 " + aultTiketnum +"명, 청소년 " + studentTiketnum +"명");
                 mainView.card.show(mainView.tab, "pay");
+
+                mainView.btnMovie.setEnabled(false);
+                mainView.btnRecmov.setEnabled(false);
+                mainView.btnSnack.setEnabled(false);
+                mainView.btnPay.setEnabled(true);
             }
             // 매점 탭에서 건너뛰기 버튼 클릭 시
             else if(obj == mainView.btn_snack[1]) {
@@ -293,11 +303,24 @@ public class MyActionListener {
             // 결제 탭에서 결제하기 버튼 클릭 시
             else if(obj == mainView.btn_pay[0]) {
                 mainView.diaSuc.setVisible(true);
+
                 mainView.card.show(mainView.tab, "movie");
+
+                // 탭을 초기 상태로 변경
+                mainView.btnMovie.setEnabled(true);
+                mainView.btnRecmov.setEnabled(true);
+                mainView.btnSnack.setEnabled(true);
+                mainView.btnPay.setEnabled(false);
             }
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
                 mainView.card.show(mainView.tab, "movie");
+
+                // 탭을 초기 상태로 변경
+                mainView.btnMovie.setEnabled(true);
+                mainView.btnRecmov.setEnabled(true);
+                mainView.btnSnack.setEnabled(true);
+                mainView.btnPay.setEnabled(false);
             }
             // 고객센터 탭 클릭시
             else if(obj == mainView.btnHelp) {
