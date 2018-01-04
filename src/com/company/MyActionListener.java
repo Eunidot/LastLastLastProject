@@ -179,7 +179,7 @@ public class MyActionListener {
 
                 // > 버튼 클릭시 영화 정보 변경
                 mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[1].setText("\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
                 mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
                 mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
@@ -195,11 +195,26 @@ public class MyActionListener {
 
                 // < 버튼 클릭시 영화 정보 변경
                 mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[1].setText("\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
                 mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
                 mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
+            }
+
+            // 영화탭에서 자세히 버튼 클릭시
+            else if(obj == mainView.detailBtn){
+                String url = apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "link");
+                DetailFrame detailFrame = new DetailFrame();
+                detailFrame.start(url);
+            }
+
+            // 추천영화 탭에서 자세히 버튼 클릭시
+            else if(obj == mainView.detailBtn2){
+                System.out.println("추천영화탭 자세히 버튼 클릭");
+                String url = apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "link");
+                DetailFrame detailFrame = new DetailFrame();
+                detailFrame.start(url);
             }
 
             // 영화 탭 버튼 클릭

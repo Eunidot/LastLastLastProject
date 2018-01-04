@@ -430,8 +430,8 @@ public class MainView {
 
 		// 처음 화면에 뿌려줄 정보
         ta[0].setText(movies.get(0).getTitle());
-        ta[1].setText(movies.get(0).getGenre());
-        ta[2].setText(apiMovie.getinfo(movies.get(0).getTitle(), "actor"));
+        ta[1].setText("\n" + movies.get(0).getGenre());
+        ta[2].setText("\n\n" + apiMovie.getinfo(movies.get(0).getTitle(), "actor"));
 
 
 		moviePanel.add(movielblP_2);
@@ -545,9 +545,10 @@ public class MainView {
 		}
 		ta2[0].setFont(movie_font);
 
+		// 추천영화 첫 화면
         ta2[0].setText(genreMovies.get(0).getTitle());
-        ta2[1].setText(genreMovies.get(0).getGenre());
-        ta2[2].setText(apiMovie.getinfo(genreMovies.get(0).getTitle(), "actor"));
+        ta2[1].setText("\n" + genreMovies.get(0).getGenre());
+        ta2[2].setText("\n\n" + apiMovie.getinfo(genreMovies.get(0).getTitle(), "actor"));
 
 		recmovPanel.add(movielblP2_2);
 
@@ -1021,6 +1022,8 @@ public class MainView {
 		for(int i=0; i<50; i++) tBtn[i].addActionListener(listener);
 		for(int i=0; i<3; i++) rb[i].addActionListener(listener);
 		btnHelp.addActionListener(listener);
+		detailBtn.addActionListener(listener);
+		detailBtn2.addActionListener(listener);
 		exitButton.addActionListener(listener);
 
 	}
