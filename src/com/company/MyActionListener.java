@@ -50,14 +50,17 @@ public class MyActionListener {
                 customer.setPw(loginView.tfLogin[1].getText());
                 // DB에 있는 id와 pw가 일치
                 if(customerDAO.login()){
-                    System.out.println("로그인 성공");
                     // 메인 뷰 보여주기
                     mainView = new MainView();
                     MainViewListenerSet();
                     JSpinnerChangeListenerSet();
                 }
-                else
-                    System.out.println("로그인 실패");
+                else {
+                    // 로그인 실패 다이얼로그 띄워주기============================================================================================================================
+                	loginView.diaNoti.showMessageDialog(loginView.frame, "로그인이 실패되었습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
+                    
+               
+                }
             }
             //회원가입 버튼
             else if(obj==loginView.btnJoin) {
@@ -73,41 +76,46 @@ public class MyActionListener {
             Object obj = e.getSource();
             //가입 버튼
             if (obj == loginView.btn[0]) {
-                // 회원 정보 객체에 담기
-                customer.setId(loginView.tfJoin[0].getText());
-                customer.setPw(loginView.tfJoin[1].getText());
-                customer.setName(loginView.tfJoin[2].getText());
-                customer.setTel(loginView.tfJoin[3].getText());
-                for(int i=0;i<6;i++){
-                    if(loginView.rb[i].isSelected()){
-                        customer.setGenre(loginView.rb[i].getText());
-                    }
+                // 빈 공백이 있다면
+                if(!blankCheck()){
+                    // 입력하지 않은 정보가 있습니다. 문구 띄워주기==================================================================================================================
+                	loginView.diaNoti.showMessageDialog(loginView.frame, "입력하지 않은 정보가 있습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
+                                
                 }
+                else {
+                    // 회원 정보 객체에 담기
+                    customer.setId(loginView.tfJoin[0].getText());
+                    customer.setPw(loginView.tfJoin[1].getText());
+                    customer.setName(loginView.tfJoin[2].getText());
+                    customer.setTel(loginView.tfJoin[3].getText());
+                    for (int i = 0; i < 6; i++) {
+                        if (loginView.rb[i].isSelected()) {
+                            customer.setGenre(loginView.rb[i].getText());
+                        }
+                    }
 
-                // 회원 가입
-                customerDAO.newCustomer();
+                    // 회원 가입
+                    customerDAO.newCustomer();
 
-                // 회원 가입 후 화면 끄기
-                loginView.diaJoin.dispose();
+                    // 회원 가입 후 화면 끄기
+                    loginView.diaJoin.dispose();
 
-                loginView.diaNoti.showMessageDialog(loginView.frame, "회원가입이 완료되었습니다.", "안내",loginView.diaNoti.INFORMATION_MESSAGE );
+                    loginView.diaNoti.showMessageDialog(loginView.frame, "회원가입이 완료되었습니다.", "안내", loginView.diaNoti.INFORMATION_MESSAGE);
+                }
             }
             //취소 버튼
             else if (obj == loginView.btn[1]) {
                 loginView.diaJoin.dispose();
-                System.out.println("취소버튼");
             }
             //중복확인 버튼
             else if (obj == loginView.btn[2]) {
                 customer.setId(loginView.tfJoin[0].getText());
                 if (customerDAO.idCheck()) {
-                    System.out.println("회원 가입 가능");
+                    loginView.tfJoin[0].setEnabled(false);
                     loginView.btn[0].setEnabled(true);
                     loginView.diaNoti.showMessageDialog(loginView.diaJoin, "회원 가입이 가능한 아이디입니다.", "안내",loginView.diaNoti.INFORMATION_MESSAGE );
-                    System.out.println("중복확인 버튼");
                 } else
                 	loginView.diaNoti.showMessageDialog(loginView.diaJoin, "이미 있는 아이디입니다.", "안내",loginView.diaNoti.ERROR_MESSAGE );
-                    System.out.println("이미 있는 아이디 입니다.");
             }
         } //actionPerformed()
     } //JoinActionL class
@@ -291,6 +299,14 @@ public class MyActionListener {
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
                 mainView.card.show(mainView.tab, "movie");
+            }
+            // 고객센터 탭 클릭시
+            else if(obj == mainView.btnHelp) {
+            	mainView.diaHelp.setVisible(true);
+            }
+            // 고객센터 탭에서 종료 버튼 클릭 시
+            else if(obj == mainView.exitButton) {
+            	mainView.diaHelp.dispose();
             }
             // 좌석 선택하는 좌석 버튼들
             else if(Istogglebtn(obj)) {
@@ -520,6 +536,32 @@ public class MyActionListener {
 
         }
     }//JspinnerChangeL class
+
+    // 회원가입시 공백 체크
+    public boolean blankCheck(){
+        boolean flag = true;
+
+        // 모든 텍스트필드가 공백이 아니라면
+        for(int i=0;i<3;i++) {
+            if(loginView.tfJoin[i+1].getText().equals("")){
+                flag = false;
+                break;
+            }
+        }
+
+        // 텍스트 필드가 모두 작성되었다면
+        if(flag) {
+            flag = false;
+            for (int i = 0; i < 6; i++) {
+                if (loginView.rb[i].isSelected()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+
+        return flag;
+    }
 
     // 0보다 더 낮게 선택 못함
     public void setZero(Object menu){

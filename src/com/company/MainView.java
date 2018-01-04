@@ -19,11 +19,14 @@ public class MainView {
 	protected JButton btnRecmov = new JButton("추천영화"); // 추천영화 탭 버튼
 	protected JButton btnSnack = new JButton("매점"); // 매점 탭 버튼
 	protected JButton btnPay = new JButton("결제"); // 결제 탭 버튼
+	protected JButton btnHelp = new JButton("고객센터"); // 고객센터 탭 버튼
+
 
 	protected ImageIcon movietab = new ImageIcon("src/com/company/img/movietab.png"); 
-	protected ImageIcon recmovtab = new ImageIcon("src/com/company/img/recmovietab.png"); 
+	protected ImageIcon recmovtab = new ImageIcon("src/com/company/img/recmovtab.png"); 
 	protected ImageIcon snacktab = new ImageIcon("src/com/company/img/snacktab.png"); 
 	protected ImageIcon paytab = new ImageIcon("src/com/company/img/paytab.png"); 
+	protected ImageIcon helptab = new ImageIcon("src/com/company/img/helptab.png"); 
 
 
 	// 배너이미지 패널(프레임 아래 이미지 패널)
@@ -48,12 +51,15 @@ public class MainView {
 	private JPanel movieP = new JPanel();
 	private JPanel movieimgP = new JPanel(); // 포스터  넣을 패널
 	private JPanel movielblP = new JPanel(); // 영화 정보 라벨 넣을 패널
+	private JPanel movielblP_2 = new JPanel();
+	private JPanel movielblP_3 = new JPanel();
 	private JPanel btnP_movie = new JPanel(); // 예매하기 버튼 넣을 패널
 
 
 	protected JButton bookBtn = new JButton("예매하기"); // 예매하기 버튼
 	protected JButton preBtn = new JButton("<"); // 슬라이드에서 이전 버튼
 	protected JButton nextBtn = new JButton(">"); // 슬라이드에서 다음 버튼
+	protected JButton detailBtn = new JButton("자세히"); // 자세히 버튼
 
 	protected JLabel imgLbl = new JLabel(); // 포스터 넣을 라벨
 	protected JLabel infoLbl[] = new JLabel[4]; // 영화정보 라벨
@@ -61,6 +67,7 @@ public class MainView {
 	protected ImageIcon prebtn = new ImageIcon("src/com/company/img/prebtn.png"); 
 	protected ImageIcon nextbtn = new ImageIcon("src/com/company/img/nextbtn.png"); 
 	protected ImageIcon bookbtn = new ImageIcon("src/com/company/img/bookbtn.png"); 
+	protected ImageIcon datailbtn = new ImageIcon("src/com/company/img/detailbtn.png"); 
 
 
 	ArrayList<String> title = new ArrayList<String>(5); // 영화 타이틀  배열리스트
@@ -68,8 +75,10 @@ public class MainView {
 	ArrayList<String> cast = new ArrayList<String>(5); // 등장인물 배열리스트
 	ArrayList<String> syn = new ArrayList<String>(5); // 줄거리 배열리스트
 
-
 	protected Font movie_font;
+
+	protected JTextArea ta[] = new JTextArea[3];
+
 	// 추천영화 패널
 	private JPanel recmovPanel = new JPanel(){
 		public void paintComponent(Graphics g) {
@@ -83,11 +92,14 @@ public class MainView {
 	private JPanel movieP2 = new JPanel();
 	private JPanel movieimgP2 = new JPanel(); // 포스터  넣을 패널
 	private JPanel movielblP2 = new JPanel(); // 영화 정보 라벨 넣을 패널
+	private JPanel movielblP2_2 = new JPanel();
+	private JPanel movielblP2_3 = new JPanel();
 	private JPanel btnP_movie2 = new JPanel(); // 예매하기 버튼 넣을 패널
 
 	protected JButton bookBtn2 = new JButton("예매하기"); // 예매하기 버튼
 	protected JButton preBtn2 = new JButton("<"); // 슬라이드에서 이전 버튼
 	protected JButton nextBtn2 = new JButton(">"); // 슬라이드에서 다음 버튼
+	protected JButton detailBtn2 = new JButton("자세히"); // 자세히 버튼
 
 	protected JLabel imgLbl2 = new JLabel(); // 포스터 넣을 라벨
 	protected JLabel infoLbl2[] = new JLabel[4]; // 영화정보 라벨
@@ -99,6 +111,8 @@ public class MainView {
 	ArrayList<String> genre2 = new ArrayList<String>(5); // 장르 배열리스트
 	ArrayList<String> cast2 = new ArrayList<String>(5); // 등장인물 배열리스트
 	ArrayList<String> syn2 = new ArrayList<String>(5); // 줄거리 배열리스트
+
+	protected JTextArea ta2[] = new JTextArea[3];
 
 
 	// 예매 패널
@@ -121,8 +135,8 @@ public class MainView {
 	protected JLabel aduLbl = new JLabel("성인"); // 성인 라벨
 	protected JLabel stuLbl = new JLabel("청소년"); // 청소년 라벨
 	protected JLabel titLbl = new JLabel("영화 제목"); // 영화제목 라벨
-    protected JLabel scrLbl = new JLabel(); // 스크린 이미지 넣을 라벨
-	
+	protected JLabel scrLbl = new JLabel(); // 스크린 이미지 넣을 라벨
+
 	protected JSpinner aduSpi = new JSpinner(); // 성인 수 세는 스피너
 	protected JSpinner stuSpi = new JSpinner(); // 청소년 수 세는 스피너
 
@@ -132,9 +146,9 @@ public class MainView {
 	protected JButton btn_book[] = new JButton[2]; // 선택/취소를 위한 2개 버튼
 
 	String movtit=""; // 영화 제목 받을 문자열
-	
+
 	protected Font book_font;
-	
+
 	protected ImageIcon screen = new ImageIcon("src/com/company/img/screen.png"); 
 	protected ImageIcon selbtn = new ImageIcon("src/com/company/img/select.png"); 
 	protected ImageIcon cancel_book = new ImageIcon("src/com/company/img/cancel_book.png"); 
@@ -173,7 +187,7 @@ public class MainView {
 
 	protected JLabel currentPay = new JLabel("현재 금액 : " + currentP_snack + " 원"); // 현재 금액 라벨
 	protected JButton btn_snack[] = new JButton[2]; // 확인, 건너뛰기 버튼
-	
+
 	protected Font snack_font; // 매점 폰트
 
 	protected ImageIcon gosoM = new ImageIcon("src/com/company/img/gosoM.png"); 
@@ -223,11 +237,28 @@ public class MainView {
 	String aduN=""; // 성인 수
 	String stuN=""; // 청소년 수
 	String comPay=""; // 총 결제 금액
-	
+
 	protected ImageIcon pay = new ImageIcon("src/com/company/img/pay.png");
 	protected ImageIcon cancel_pay = new ImageIcon("src/com/company/img/cancel_pay.png"); 
-
 	protected ImageIcon complete = new ImageIcon("src/com/company/img/complete.gif"); 
+	
+	
+	// 고객센터 패널
+	protected JDialog diaHelp; // 고객센터 탭버튼 눌렀을 때 나오는 다이얼로그
+	protected JPanel helpP = new JPanel(); // 전체 패널
+	protected JPanel lblP = new JPanel(); // 고객센터 라벨 패널
+	protected JPanel msgPanel = new JPanel(); // 메세지 입력창 패널
+	
+	protected JLabel lblHelp = new JLabel("고객센터입니다. 무엇을 도와드릴까요?");
+	
+	protected JTextField msgInput = new JTextField(); // 메세지 입력창
+	protected JButton exitButton = new JButton("종료"); // 다이얼로그 종료버튼
+	
+	protected JTextArea msgOut; // 메시지 나오는 창
+	
+	protected ImageIcon exitbutton = new ImageIcon("src/com/company/img/exitbutton.png"); 
+	
+	protected Font help_font;
 
 
 	// 화면 구성 전환을 위한 카드 레이아웃
@@ -250,12 +281,12 @@ public class MainView {
 
 	//-------------------------------------------------------------------------------------------------------------------------------- 영화 테스트
 
-    //---------------- 영화포스터 -----------------------------
-    String movieTitle1 = movies.get(0).getTitle();
-    ImageIcon movieImg1 = new ImageIcon("src/com/company/img/" + movieTitle1 + ".jpg"); // 포스터 이미지 배열리스트
+	//---------------- 영화포스터 -----------------------------
+	String movieTitle1 = movies.get(0).getTitle();
+	ImageIcon movieImg1 = new ImageIcon("src/com/company/img/" + movieTitle1 + ".jpg"); // 포스터 이미지 배열리스트
 
-    String movieTitle2 = genreMovies.get(0).getTitle();
-    ImageIcon movieImg2 = new ImageIcon("src/com/company/img/" + movieTitle2 + ".jpg"); // 포스터 이미지 배열리스트
+	String movieTitle2 = genreMovies.get(0).getTitle();
+	ImageIcon movieImg2 = new ImageIcon("src/com/company/img/" + movieTitle2 + ".jpg"); // 포스터 이미지 배열리스트
 	// 생성자
 	public MainView(){
 
@@ -271,10 +302,11 @@ public class MainView {
 		tabPanel.setBackground(Color.WHITE);
 		tabPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 
-		btnMovie.setPreferredSize(new Dimension(196,100));
-		btnRecmov.setPreferredSize(new Dimension(216,100));
-		btnSnack.setPreferredSize(new Dimension(191,100));
-		btnPay.setPreferredSize(new Dimension(197,100));
+		btnMovie.setPreferredSize(new Dimension(151,100));
+		btnRecmov.setPreferredSize(new Dimension(167,100));
+		btnSnack.setPreferredSize(new Dimension(156,100));
+		btnPay.setPreferredSize(new Dimension(153,100));
+		btnHelp.setPreferredSize(new Dimension(173,100));
 
 		btnMovie.setIcon(movietab);
 		btnMovie.setText(null);
@@ -295,11 +327,19 @@ public class MainView {
 		btnPay.setText(null);
 		btnPay.setBorderPainted(false); // 버튼 테두리 없이
 		btnPay.setContentAreaFilled(false); // 여백 없이
+		btnPay.setEnabled(false);
+
+		btnHelp.setIcon(helptab);
+		btnHelp.setText(null);
+		btnHelp.setBorderPainted(false); // 버튼 테두리 없이
+		btnHelp.setContentAreaFilled(false); // 여백 없이
+
 
 		tabPanel.add(btnMovie);
 		tabPanel.add(btnRecmov);
 		tabPanel.add(btnSnack);
 		tabPanel.add(btnPay);
+		tabPanel.add(btnHelp);
 		frame2.add(tabPanel);
 
 		//------------------------배너 이미지 패널------------------------
@@ -347,30 +387,61 @@ public class MainView {
 		movieimgP.add(imgLbl);
 		movieP.add(movieimgP);
 
-		
-		movielblP.setLayout(new GridLayout(4,1));
-		movielblP.setBounds(400, 0, 300, 510);
+
+		movielblP.setLayout(new GridLayout(3,1));
+		movielblP.setBounds(400, 0, 100, 381);
 		movielblP.setOpaque(false);
-		
+
 		movie_font = new Font("돋움", Font.ITALIC, 15); 
-		
+
 		// infoLbl 배치
-		for(int i=0;i<4;i++){
+		for(int i=0;i<3;i++){
 			infoLbl[i] = new JLabel();
 		}
 
-		infoLbl[0].setText("영화제목 : " + movies.get(0).getTitle());
+		infoLbl[0].setText("영화제목 : ");
 		infoLbl[0].setFont(movie_font);
-		infoLbl[1].setText("장르 : " + movies.get(0).getGenre());
-		infoLbl[2].setText("출연 : " + movies.get(0).getActor());
-		infoLbl[3].setText("줄거리 : " + movies.get(0).getPlot());
+		infoLbl[1].setText("장르 : ");
+		infoLbl[2].setText("출연 : ");
 
-		for(int i=0;i<4;i++){
+
+		for(int i=0;i<3;i++){
 			movielblP.add(infoLbl[i]);
-		}
-		
+		}		
 		moviePanel.add(movielblP);
-		
+
+		//---------------------movielblP_2 이부분이 textarea인데 장르, 출연 넣을 때는 \n 사용해서 줄 맞춰주시면 될 것 같아요!!---------------
+		movielblP_2.setLayout(new GridLayout(3,1));
+		movielblP_2.setBounds(500, 50, 200, 331);
+		movielblP_2.setOpaque(false);
+
+		for(int i=0; i<3; i++) {
+			ta[i] = new JTextArea(15, 2);
+			ta[i].setLineWrap(true); // 자동 줄바꿈
+			ta[i].setOpaque(false);
+			movielblP_2.add(ta[i]);
+		}
+		ta[0].setFont(movie_font);
+		moviePanel.add(movielblP_2);
+
+
+		movielblP_3.setLayout(new FlowLayout(FlowLayout.LEFT, 0 , 30));
+		movielblP_3.setBounds(400, 381, 150, 129);
+		movielblP_3.setOpaque(false);
+
+		infoLbl[3] = new JLabel();
+		infoLbl[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
+		movielblP_3.add(infoLbl[3]);
+		moviePanel.add(movielblP_3);
+
+		detailBtn.setBounds(600, 406, 100, 40);
+		detailBtn.setIcon(datailbtn);
+		detailBtn.setText(null);
+		detailBtn.setBorderPainted(false); // 버튼 테두리 없이
+		detailBtn.setContentAreaFilled(false); // 여백 없이		
+		moviePanel.add(detailBtn);
+
+
 
 		btnP_movie.setLayout(new FlowLayout());
 		btnP_movie.setBounds(300, 540, 200, 50);
@@ -427,27 +498,59 @@ public class MainView {
 		movieP2.add(movieimgP2);
 
 
-		movielblP2.setLayout(new GridLayout(4,1));
-		movielblP2.setBounds(400, 0, 300, 510);
+		movielblP2.setLayout(new GridLayout(3,1));
+		movielblP2.setBounds(400, 0, 100, 381);
 		movielblP2.setOpaque(false);
 		// infoLbl2 배치
-		for(int i=0;i<4;i++){
+		for(int i=0;i<3;i++){
 			infoLbl2[i] = new JLabel();
 		}
 
-		infoLbl2[0].setText("영화제목 : " + genreMovies.get(0).getTitle());
+		infoLbl2[0].setText("영화제목 : ");
 		infoLbl2[0].setFont(movie_font);
-		infoLbl2[1].setText("장르 : " + genreMovies.get(0).getGenre());
-		infoLbl2[2].setText("출연 : " + genreMovies.get(0).getActor());
-		infoLbl2[3].setText("줄거리 : " + genreMovies.get(0).getPlot());
+		infoLbl2[1].setText("장르 : ");
+		infoLbl2[2].setText("출연 : ");
 
-		for(int i=0;i<4;i++){
+		for(int i=0;i<3;i++){
 			movielblP2.add(infoLbl2[i]);
 		}
 
 		recmovPanel.add(movielblP2);
 
-		
+		//---------------------movielblP2_2 이부분이 textarea인데 장르, 출연 넣을 때는 \n 사용해서 줄 맞춰주시면 될 것 같아요!!---------------
+		movielblP2_2.setLayout(new GridLayout(3,1));
+		movielblP2_2.setBounds(500, 50, 200, 331);
+		movielblP2_2.setOpaque(false);
+
+		for(int i=0; i<3; i++) {
+			ta2[i] = new JTextArea(15, 2);
+			ta2[i].setLineWrap(true); // 자동 줄바꿈
+			ta2[i].setOpaque(false);
+			movielblP2_2.add(ta2[i]);
+		}
+		ta2[0].setFont(movie_font);
+		recmovPanel.add(movielblP2_2);
+
+
+		movielblP2_3.setLayout(new FlowLayout(FlowLayout.LEFT, 0 , 30));
+		movielblP2_3.setBounds(400, 381, 150, 129);
+		movielblP2_3.setOpaque(false);
+
+		infoLbl2[3] = new JLabel();
+		infoLbl2[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
+		movielblP2_3.add(infoLbl2[3]);
+		recmovPanel.add(movielblP2_3);
+
+		detailBtn2.setBounds(600, 406, 100, 40);
+		detailBtn2.setIcon(datailbtn);
+		detailBtn2.setText(null);
+		detailBtn2.setBorderPainted(false); // 버튼 테두리 없이
+		detailBtn2.setContentAreaFilled(false); // 여백 없이		
+		recmovPanel.add(detailBtn2);
+
+
+
+
 
 		btnP_movie2.setLayout(new FlowLayout());
 		btnP_movie2.setBounds(300, 540, 200, 50);
@@ -485,7 +588,7 @@ public class MainView {
 		bookPanel.add(spiP);
 
 		book_font = new Font("돋움", Font.BOLD, 25); 
-		
+
 		titP.setLayout(new BorderLayout());
 		titP.setBounds(240, 20, 560, 80);
 		titP.setOpaque(false);
@@ -576,14 +679,14 @@ public class MainView {
 		btn_book[0].setBorderPainted(false); // 버튼 테두리 없이
 		btn_book[0].setContentAreaFilled(false); // 여백 없이
 		btn_book[0].setEnabled(false);
-		
+
 		btn_book[1] = new JButton();
 		btn_book[1].setPreferredSize(new Dimension(100, 50));
 		btn_book[1].setIcon(cancel_book);
 		btn_book[1].setText(null);
 		btn_book[1].setBorderPainted(false); // 버튼 테두리 없이
 		btn_book[1].setContentAreaFilled(false); // 여백 없이
-		
+
 		for(int i=0;i<2;i++){
 			btnP.add(btn_book[i]);
 		}		
@@ -599,8 +702,8 @@ public class MainView {
 
 		menuP1.setLayout(new GridLayout(1,4));
 		menuP1.setBounds(50, 40, 700, 80);
-	
-	
+
+
 		// menu1 라벨 배치
 		for(int i=0;i<4;i++){
 			menu1[i] = new JLabel();
@@ -647,7 +750,7 @@ public class MainView {
 		menu3[2].setText(null);
 		menu3[3].setIcon(ciderL);
 		menu3[3].setText(null);
-		
+
 
 		for(int i=0;i<4;i++){
 			menuP3.add(menu3[i]);
@@ -703,7 +806,7 @@ public class MainView {
 
 
 		snack_font = new Font("돋움", Font.BOLD, 25);
-		
+
 		currentP.setLayout(new BorderLayout());
 		currentP.setBounds(450, 380, 350, 80);
 		currentP.setOpaque(false);
@@ -715,7 +818,7 @@ public class MainView {
 		btnP_snack.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
 		btnP_snack.setBounds(0, 460, 800, 100);
 		btnP_snack.setOpaque(false);
-		
+
 		btn_snack[0] = new JButton();
 		btn_snack[0].setPreferredSize(new Dimension(150, 50));
 		btn_snack[0].setIcon(conf);
@@ -723,15 +826,15 @@ public class MainView {
 		btn_snack[0].setBorderPainted(false); // 버튼 테두리 없이
 		btn_snack[0].setContentAreaFilled(false); // 여백 없이
 		btn_snack[0].setEnabled(false);
-	
-		
+
+
 		btn_snack[1] = new JButton();
 		btn_snack[1].setPreferredSize(new Dimension(150, 50));
 		btn_snack[1].setIcon(skip);
 		btn_snack[1].setText(null);
 		btn_snack[1].setBorderPainted(false); // 버튼 테두리 없이
 		btn_snack[1].setContentAreaFilled(false); // 여백 없이
-		
+
 		for(int i=0;i<2;i++){
 			btnP_snack.add(btn_snack[i]);
 		}		
@@ -785,7 +888,7 @@ public class MainView {
 		btnP_pay.setLayout(new FlowLayout(FlowLayout.CENTER, 150, 30));
 		btnP_pay.setBounds(0, 500, 800, 100);
 		btnP_pay.setOpaque(false);
-		
+
 		btn_pay[0] = new JButton();
 		btn_pay[0].setPreferredSize(new Dimension(150, 50));
 		btn_pay[0].setIcon(pay);
@@ -793,7 +896,7 @@ public class MainView {
 		btn_pay[0].setBorderPainted(false); // 버튼 테두리 없이
 		btn_pay[0].setContentAreaFilled(false); // 여백 없이
 		btn_pay[0].setEnabled(false);
-			
+
 		btn_pay[1] = new JButton();
 		btn_pay[1].setPreferredSize(new Dimension(150, 50));
 		btn_pay[1].setIcon(cancel_pay);
@@ -818,6 +921,46 @@ public class MainView {
 		sucimgLbl.setText(null);
 		sucP.add(sucimgLbl);
 		diaSuc.add(sucP);
+		
+		//------------------------고객센터 패널------------------------
+		diaHelp = new JDialog();
+		diaHelp.setTitle("::고객센터::");
+		diaHelp.setSize(600, 600);
+		
+		helpP.setLayout(new BorderLayout());
+		helpP.setSize(600, 600);
+		
+		help_font = new Font("돋움", Font.ITALIC, 18); 
+		
+		lblHelp.setFont(help_font);
+		lblP.setBounds(20, 20, 580, 40);
+		lblP.setBackground(new Color(242,240,229));
+		lblP.add(lblHelp);
+		helpP.add(lblP, BorderLayout.NORTH); // lblHelp 상단에 배치
+		
+		// 메시지 입력 패널에 위젯 구성
+		msgPanel.setLayout(new BorderLayout());
+		msgPanel.add(msgInput, BorderLayout.CENTER);
+		
+		exitButton.setIcon(exitbutton);
+		exitButton.setText(null);
+		exitButton.setBorderPainted(false); // 버튼 테두리 없이
+		exitButton.setContentAreaFilled(false); // 여백 없이		
+		msgPanel.add(exitButton, BorderLayout.EAST);
+		helpP.add(msgPanel, BorderLayout.SOUTH);
+		
+		// 메시지 출력 영역 초기화
+		msgOut = new JTextArea("", 10, 30);
+		// JTextArea의 내용을 수정하지 못하도록 한다. 즉, 출력 전용으로 사용한다.
+		msgOut.setEditable(false);
+		
+		// 메시지 출력 영역 스크롤바를 구성한다.
+		// 수직 스크롤 바는 항상 나타내고 수평 스크롤 바는 필요할 때 나타나도록 한다.
+		JScrollPane jsp = new JScrollPane(msgOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		helpP.add(jsp, BorderLayout.CENTER);
+		
+		diaHelp.add(helpP);		
 
 
 		// 영화,추천영화,매점,결제 패널 중 하나를 선택하는 CardLayout 패널
@@ -854,6 +997,8 @@ public class MainView {
 		btn_pay[1].addActionListener(listener);
 		for(int i=0; i<50; i++) tBtn[i].addActionListener(listener);
 		for(int i=0; i<3; i++) rb[i].addActionListener(listener);
+		btnHelp.addActionListener(listener);
+		exitButton.addActionListener(listener);
 
 	}
 
