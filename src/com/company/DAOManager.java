@@ -8,7 +8,6 @@ public class DAOManager {
     private CustomerDAO m_customerDAO;
     private MovieDAO m_movieDAO;
     private PaymentDAO m_paymentDAO;
-    private ReservationDAO m_reservationDAO;
     private SeatDAO m_seatDAO;
     private SnackDAO m_snackDAO;
     private SnackOrderDAO m_snackOrderDAO;
@@ -55,9 +54,6 @@ public class DAOManager {
     public void setPaymentDAO (PaymentDAO paymentdao) {
         m_paymentDAO = paymentdao;
     }
-    public void setReservationDAO (ReservationDAO reservationdao) {
-        m_reservationDAO = reservationdao;
-    }
     public void setSeatDAO (SeatDAO seatdao) {
         m_seatDAO = seatdao;
     }
@@ -80,9 +76,6 @@ public class DAOManager {
     }
     public PaymentDAO getPaymentDAO() {
         return m_paymentDAO;
-    }
-    public ReservationDAO getReservationDAO() {
-        return m_reservationDAO;
     }
     public SeatDAO getSeatDAO() {
         return m_seatDAO;

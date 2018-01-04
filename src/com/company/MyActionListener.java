@@ -27,6 +27,7 @@ public class MyActionListener {
     Ticket ticket = new Ticket();
     TicketDAO ticketDAO = new TicketDAO();
     SeatDAO seatDAO = new SeatDAO();
+    PaymentDAO paymentDAO = new PaymentDAO();
 
     int aultTiketnum = 0;
     int studentTiketnum = 0;
@@ -318,6 +319,10 @@ public class MyActionListener {
                 mainView.infoL_pay[0].setText("티켓 수 : 성인 " + aultTiketnum +"명, 청소년 " + studentTiketnum +"명");
                 mainView.card.show(mainView.tab, "pay");
 
+                mainView.btnMovie.setEnabled(false);
+                mainView.btnRecmov.setEnabled(false);
+                mainView.btnSnack.setEnabled(false);
+                mainView.btnPay.setEnabled(true);
 
             }
             // 결제 탭 클릭시
@@ -335,6 +340,37 @@ public class MyActionListener {
                 mainView.btnRecmov.setEnabled(true);
                 mainView.btnSnack.setEnabled(true);
                 mainView.btnPay.setEnabled(false);
+
+                // 결제 방식에 따라 payment테이블에 정보 저장
+                for(int i=0;i<3;i++) {
+                    if(mainView.rb[i].isSelected()) {
+                        paymentDAO.newPayment(allPrice, mainView.rb[i].getText(), customer.getId());
+                        break;
+                    }
+                }
+
+                //  영화 탭 화면 초기화
+                mainView.ta[0].setText(mainView.movies.get(0).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(0).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "userRating"));
+
+                // 추천 영화 탭 화면 초기화
+                mainView.ta2[0].setText(mainView.genreMovies.get(0).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(0).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "userRating"));
+
+                // 매점 초기화
+                for(int i=0;i<4;i++){
+                    mainView.menu2[i].setValue(0);
+                    mainView.menu4[i].setValue(0);
+                    mainView.menu6[i].setValue(0);
+                }
+
+                // 구입 가격 초기화
+                allPrice = 0;
+
             }
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
