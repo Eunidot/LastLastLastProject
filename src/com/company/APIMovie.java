@@ -8,8 +8,8 @@ import java.net.URLEncoder;
 
 public class APIMovie {
     // 네이버 API 키값
-    String clientId = "";
-    String clientSecret = "";
+    String clientId = "5diZho3PLVF6IvUkDN0a";
+    String clientSecret = "Wie3JCCLC5";
 
     URL url;
     String apiURL;
@@ -52,3 +52,4 @@ public class APIMovie {
         return response.toString();
     }
 }
+//푸쉬
