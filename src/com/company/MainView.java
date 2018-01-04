@@ -419,7 +419,6 @@ public class MainView {
 		}		
 		moviePanel.add(movielblP);
 
-		//---------------------movielblP_2 이부분이 textarea인데 장르, 출연 넣을 때는 \n 사용해서 줄 맞춰주시면 될 것 같아요!!---------------
 		movielblP_2.setLayout(new GridLayout(3,1));
 		movielblP_2.setBounds(500, 50, 200, 331);
 		movielblP_2.setOpaque(false);
