@@ -57,6 +57,9 @@ public class MyActionListener {
                 }
                 else {
                     // 로그인 실패 다이얼로그 띄워주기============================================================================================================================
+                	loginView.diaNoti.showMessageDialog(loginView.frame, "로그인이 실패되었습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
+                    
+               
                 }
             }
             //회원가입 버튼
@@ -76,6 +79,8 @@ public class MyActionListener {
                 // 빈 공백이 있다면
                 if(!blankCheck()){
                     // 입력하지 않은 정보가 있습니다. 문구 띄워주기==================================================================================================================
+                	loginView.diaNoti.showMessageDialog(loginView.frame, "입력하지 않은 정보가 있습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
+                                
                 }
                 else {
                     // 회원 정보 객체에 담기
