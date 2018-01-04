@@ -97,5 +97,3 @@ public class DAOManager {
         return m_ticketDAO;
     }
 }
-
-// 풀용
