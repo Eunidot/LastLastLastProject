@@ -84,7 +84,7 @@ public class MyActionListener {
                 // 빈 공백이 있다면
                 if(!blankCheck()){
                     // 입력하지 않은 정보가 있습니다. 문구 띄워주기==================================================================================================================
-                	loginView.diaNoti.showMessageDialog(loginView.frame, "입력하지 않은 정보가 있습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
+                	loginView.diaNoti.showMessageDialog(loginView.diaJoin, "입력하지 않은 정보가 있습니다.", "안내", loginView.diaNoti.ERROR_MESSAGE);
                                 
                 }
                 else {
