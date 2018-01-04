@@ -15,9 +15,11 @@ public class APIMovie {
     String apiURL;
     String title;
     String inputLine;
-    StringBuffer response = new StringBuffer();
+
 
     public String getinfo(String title, String type) {
+        StringBuffer response = new StringBuffer();
+
         try {
             String text = URLEncoder.encode(title, "UTF-8");
             apiURL = "https://openapi.naver.com/v1/search/movie?query=" + text + "&yearfrom=1950&yearto=2017";
@@ -39,11 +41,10 @@ public class APIMovie {
                     String arr[] = new String[5];
                     arr = inputLine.split("\"", 5);
                     response.append(arr[3] + "\n");
+                    break;
                 }
-
             }
             br.close();
-            System.out.println(response.toString());
         } catch (Exception e) {
             System.out.println(e);
         }

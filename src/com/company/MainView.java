@@ -262,6 +262,9 @@ public class MainView {
 	int mIdx=0;
 	int genreIdx=0;
 
+	// 파싱한 데이터 사용하기
+	APIMovie apiMovie = new APIMovie();
+
 	//-------------------------------------------------------------------------------------------------------------------------------- 영화 테스트
 
 	//---------------- 영화포스터 -----------------------------
@@ -405,6 +408,13 @@ public class MainView {
 			movielblP_2.add(ta[i]);
 		}
 		ta[0].setFont(movie_font);
+
+		// 처음 화면에 뿌려줄 정보
+        ta[0].setText(movies.get(0).getTitle());
+        ta[1].setText(movies.get(0).getGenre());
+        ta[2].setText(apiMovie.getinfo(movies.get(0).getTitle(), "actor"));
+
+
 		moviePanel.add(movielblP_2);
 
 
@@ -415,6 +425,9 @@ public class MainView {
 		infoLbl[3] = new JLabel();
 		infoLbl[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
 		movielblP_3.add(infoLbl[3]);
+
+        infoLbl[3].setText("평점 : " + apiMovie.getinfo(movies.get(0).getTitle(), "userRating"));
+
 		moviePanel.add(movielblP_3);
 
 		detailBtn.setBounds(600, 406, 100, 40);
@@ -512,6 +525,11 @@ public class MainView {
 			movielblP2_2.add(ta2[i]);
 		}
 		ta2[0].setFont(movie_font);
+
+        ta2[0].setText(genreMovies.get(0).getTitle());
+        ta2[1].setText(genreMovies.get(0).getGenre());
+        ta2[2].setText(apiMovie.getinfo(genreMovies.get(0).getTitle(), "actor"));
+
 		recmovPanel.add(movielblP2_2);
 
 
@@ -521,6 +539,9 @@ public class MainView {
 
 		infoLbl2[3] = new JLabel();
 		infoLbl2[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
+
+        infoLbl2[3].setText("평점 : " + apiMovie.getinfo(genreMovies.get(0).getTitle(), "userRating"));
+
 		movielblP2_3.add(infoLbl2[3]);
 		recmovPanel.add(movielblP2_3);
 

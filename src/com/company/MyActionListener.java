@@ -36,6 +36,8 @@ public class MyActionListener {
     String pString = "팝콘 : "; // 결제패널 팝콘 문자열
     String bString = "음료 : "; // 결제패널 음료 문자열
 
+    APIMovie apiMovie = new APIMovie();
+
     public MyActionListener() {
         AppManager.getInstance().setMyactionListener(this);
     }
@@ -144,10 +146,10 @@ public class MyActionListener {
                     mainView.mIdx -= mainView.movies.size();
 
                 // > 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
-                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
-                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
-                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+                mainView.ta[0].setText(mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.movies.get(mainView.mIdx);
             }
@@ -160,10 +162,10 @@ public class MyActionListener {
                     mainView.mIdx += mainView.movies.size();
 
                 // < 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl[0].setText("영화제목 : " + mainView.movies.get(mainView.mIdx).getTitle());
-                mainView.infoLbl[1].setText("장르 : " + mainView.movies.get(mainView.mIdx).getGenre());
-                mainView.infoLbl[2].setText("출연 : " + mainView.movies.get(mainView.mIdx).getActor());
-                mainView.infoLbl[3].setText("줄거리 : " + mainView.movies.get(mainView.mIdx).getPlot());
+                mainView.ta[0].setText(mainView.movies.get(mainView.mIdx).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(mainView.mIdx).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(mainView.mIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.movies.get(mainView.mIdx);
             }
@@ -176,10 +178,10 @@ public class MyActionListener {
                     mainView.genreIdx -= mainView.genreMovies.size();
 
                 // > 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
-                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
-                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+                mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
@@ -192,10 +194,10 @@ public class MyActionListener {
                     mainView.genreIdx += mainView.genreMovies.size();
 
                 // < 버튼 클릭시 영화 정보 변경
-                mainView.infoLbl2[0].setText("영화제목 : " + mainView.genreMovies.get(mainView.genreIdx).getTitle());
-                mainView.infoLbl2[1].setText("장르 : " + mainView.genreMovies.get(mainView.genreIdx).getGenre());
-                mainView.infoLbl2[2].setText("출연 : " + mainView.genreMovies.get(mainView.genreIdx).getActor());
-                mainView.infoLbl2[3].setText("줄거리 : " + mainView.genreMovies.get(mainView.genreIdx).getPlot());
+                mainView.ta2[0].setText(mainView.genreMovies.get(mainView.genreIdx).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(mainView.genreIdx).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(mainView.genreIdx).getTitle(), "userRating"));
 
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
