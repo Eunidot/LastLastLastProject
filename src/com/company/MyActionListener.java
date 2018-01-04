@@ -220,7 +220,6 @@ public class MyActionListener {
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
-
                 mainView.card.show(mainView.tab, "snack");
                 String str=seatselect[0];
                 for(int i=1;i<4;i++) {
