@@ -240,8 +240,25 @@ public class MainView {
 
 	protected ImageIcon pay = new ImageIcon("src/com/company/img/pay.png");
 	protected ImageIcon cancel_pay = new ImageIcon("src/com/company/img/cancel_pay.png"); 
-
 	protected ImageIcon complete = new ImageIcon("src/com/company/img/complete.gif"); 
+	
+	
+	// 고객센터 패널
+	protected JDialog diaHelp; // 고객센터 탭버튼 눌렀을 때 나오는 다이얼로그
+	protected JPanel helpP = new JPanel(); // 전체 패널
+	protected JPanel lblP = new JPanel(); // 고객센터 라벨 패널
+	protected JPanel msgPanel = new JPanel(); // 메세지 입력창 패널
+	
+	protected JLabel lblHelp = new JLabel("고객센터입니다. 무엇을 도와드릴까요?");
+	
+	protected JTextField msgInput = new JTextField(); // 메세지 입력창
+	protected JButton exitButton = new JButton("종료"); // 다이얼로그 종료버튼
+	
+	protected JTextArea msgOut; // 메시지 나오는 창
+	
+	protected ImageIcon exitbutton = new ImageIcon("src/com/company/img/exitbutton.png"); 
+	
+	protected Font help_font;
 
 
 	// 화면 구성 전환을 위한 카드 레이아웃
@@ -925,6 +942,46 @@ public class MainView {
 		sucimgLbl.setText(null);
 		sucP.add(sucimgLbl);
 		diaSuc.add(sucP);
+		
+		//------------------------고객센터 패널------------------------
+		diaHelp = new JDialog();
+		diaHelp.setTitle("::고객센터::");
+		diaHelp.setSize(600, 600);
+		
+		helpP.setLayout(new BorderLayout());
+		helpP.setSize(600, 600);
+		
+		help_font = new Font("돋움", Font.ITALIC, 18); 
+		
+		lblHelp.setFont(help_font);
+		lblP.setBounds(20, 20, 580, 40);
+		lblP.setBackground(new Color(242,240,229));
+		lblP.add(lblHelp);
+		helpP.add(lblP, BorderLayout.NORTH); // lblHelp 상단에 배치
+		
+		// 메시지 입력 패널에 위젯 구성
+		msgPanel.setLayout(new BorderLayout());
+		msgPanel.add(msgInput, BorderLayout.CENTER);
+		
+		exitButton.setIcon(exitbutton);
+		exitButton.setText(null);
+		exitButton.setBorderPainted(false); // 버튼 테두리 없이
+		exitButton.setContentAreaFilled(false); // 여백 없이		
+		msgPanel.add(exitButton, BorderLayout.EAST);
+		helpP.add(msgPanel, BorderLayout.SOUTH);
+		
+		// 메시지 출력 영역 초기화
+		msgOut = new JTextArea("", 10, 30);
+		// JTextArea의 내용을 수정하지 못하도록 한다. 즉, 출력 전용으로 사용한다.
+		msgOut.setEditable(false);
+		
+		// 메시지 출력 영역 스크롤바를 구성한다.
+		// 수직 스크롤 바는 항상 나타내고 수평 스크롤 바는 필요할 때 나타나도록 한다.
+		JScrollPane jsp = new JScrollPane(msgOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		helpP.add(jsp, BorderLayout.CENTER);
+		
+		diaHelp.add(helpP);		
 
 
 		// 영화,추천영화,매점,결제 패널 중 하나를 선택하는 CardLayout 패널
@@ -961,6 +1018,8 @@ public class MainView {
 		btn_pay[1].addActionListener(listener);
 		for(int i=0; i<50; i++) tBtn[i].addActionListener(listener);
 		for(int i=0; i<3; i++) rb[i].addActionListener(listener);
+		btnHelp.addActionListener(listener);
+		exitButton.addActionListener(listener);
 
 	}
 

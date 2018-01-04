@@ -323,6 +323,14 @@ public class MyActionListener {
                 mainView.btnSnack.setEnabled(true);
                 mainView.btnPay.setEnabled(false);
             }
+            // 고객센터 탭 클릭시
+            else if(obj == mainView.btnHelp) {
+            	mainView.diaHelp.setVisible(true);
+            }
+            // 고객센터 탭에서 종료 버튼 클릭 시
+            else if(obj == mainView.exitButton) {
+            	mainView.diaHelp.dispose();
+            }
             // 좌석 선택하는 좌석 버튼들
             else if(Istogglebtn(obj)) {
                 int selectcount =0; //버튼을 선택 한 개수
