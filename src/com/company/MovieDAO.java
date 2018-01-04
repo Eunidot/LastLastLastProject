@@ -102,6 +102,7 @@ public class MovieDAO {
         return movies.get(random-1);
     }
 
+    // 특정 장르에 맞는 영화 전부 리턴
     public ArrayList<Movie> getGenreAll(String genre){
         daoManager.connectDB();
         String sql = "SELECT * FROM movie WHERE genre = ?";
