@@ -381,6 +381,15 @@ public class MyActionListener {
                 mainView.btnRecmov.setEnabled(true);
                 mainView.btnSnack.setEnabled(true);
                 mainView.btnPay.setEnabled(false);
+/*
+                mainView.ta[0].setText(mainView.movies.get(0).getTitle());
+                mainView.ta[1].setText("\n" + mainView.movies.get(0).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "userRating"));
+*/
+                curMovie = mainView.genreMovies.get(mainView.mIdx);
+
+
             }
             // 고객센터 탭 클릭시
             else if(obj == mainView.btnHelp) {
