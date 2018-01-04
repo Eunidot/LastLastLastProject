@@ -5,6 +5,7 @@ import javafx.scene.control.Spinner;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLOutput;
 
@@ -25,6 +26,7 @@ public class MyActionListener {
     SnackDAO snackDAO = new SnackDAO();
     Ticket ticket = new Ticket();
     TicketDAO ticketDAO = new TicketDAO();
+    SeatDAO seatDAO = new SeatDAO();
 
     int aultTiketnum = 0;
     int studentTiketnum = 0;
@@ -224,7 +226,7 @@ public class MyActionListener {
             }
             // 영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn) {
-                mainView.card.show(mainView.tab, "book");
+                    mainView.card.show(mainView.tab, "book");
             }
             // 추천 영화 탭 클릭
             else if(obj == mainView.btnRecmov) {
@@ -237,22 +239,26 @@ public class MyActionListener {
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
+                    Reservation();
+                    /*mainView.card.show(mainView.tab, "snack");
+                    String str = seatselect[0];
+                    for (int i = 1; i < 4; i++) {
+                        if (seatselect[i] == null) continue;
+                        str = str + "," + seatselect[i];
+                    }
+                    ticket.setCutomername(customer.id);
+                    ticket.setSeletseat(str);
+                    ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
+                    ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
+                    ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+                    mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+                    for (int j = 0; j < seatselect.length; j++) {
+                        seatDAO.setSelectedSeat(seatselect[j]);
+                    }
 
-                mainView.card.show(mainView.tab, "snack");
-                String str=seatselect[0];
-                for(int i=1;i<4;i++) {
-                    if(seatselect[i]==null) continue;
-                    str=str+","+seatselect[i];
-                }
-                ticket.setCutomername(customer.id);
-                ticket.setSeletseat(str);
-                ticket.setTotalnum((int)mainView.aduSpi.getValue()+(int)mainView.stuSpi.getValue());
-                ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
-                ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
-                mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+                    mainView.btnMovie.setEnabled(false);
+                    mainView.btnRecmov.setEnabled(false);*/
 
-                mainView.btnMovie.setEnabled(false);
-                mainView.btnRecmov.setEnabled(false);
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -262,9 +268,11 @@ public class MyActionListener {
                 mainView.stuSpi.setValue(0);
                 for(int l=0;l<50;l++) {
                     mainView.tBtn[l].setSelected(false);
+                    if(mainView.tBtn[l].getText().equals("X")) continue;
                     mainView.tBtn[l].setEnabled(true);
                 }
             }
+
             // 매점 탭 클릭시
             else if(obj == mainView.btnSnack) {
                 mainView.card.show(mainView.tab, "snack");
@@ -372,6 +380,7 @@ public class MyActionListener {
                         mainView.aduSpi.setEnabled(true);
                         for(int z=0;z<50;z++) {
                             if(!mainView.tBtn[z].isSelected()){
+                                if(mainView.tBtn[z].getText().equals("X")) continue;
                                 mainView.tBtn[z].setEnabled(true); // 모든 버튼 비활성화
                             }
                         }
@@ -411,6 +420,7 @@ public class MyActionListener {
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 aultTiketnum = (int)mainView.aduSpi.getValue();
                 for(int j=0;j<50;j++) {
+                    if(mainView.tBtn[j].getText().equals("X")) continue;
                     mainView.tBtn[j].setEnabled(true);
                 }
                 //0이하로 내려가지 않게 함
@@ -434,6 +444,7 @@ public class MyActionListener {
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 studentTiketnum = (int)mainView.stuSpi.getValue();
                 for(int j=0;j<50;j++) {
+                    if(mainView.tBtn[j].getText().equals("X")) continue;
                     mainView.tBtn[j].setEnabled(true);
                 }
                 //0이하로 내려가지 않게
@@ -608,7 +619,26 @@ public class MyActionListener {
             js.setValue(0);
         }
     }
+    public synchronized void Reservation() {
+        mainView.card.show(mainView.tab, "snack");
+        String str = seatselect[0];
+        for (int i = 1; i < 4; i++) {
+            if (seatselect[i] == null) continue;
+            str = str + "," + seatselect[i];
+        }
+        ticket.setCutomername(customer.id);
+        ticket.setSeletseat(str);
+        ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
+        ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
+        ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+        mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+        for (int j = 0; j < seatselect.length; j++) {
+            seatDAO.setSelectedSeat(seatselect[j]);
+        }
 
+        mainView.btnMovie.setEnabled(false);
+        mainView.btnRecmov.setEnabled(false);
+    }
     public void LoginListenerSet() {
         loginView.addListenerLogin(lL);
     } //ListenerSet()
