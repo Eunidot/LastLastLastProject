@@ -76,6 +76,8 @@ public class MainView {
 	ArrayList<String> syn = new ArrayList<String>(5); // 줄거리 배열리스트
 
 	protected Font movie_font;
+	protected Font info_font;
+	protected Font info_font2;
 
 	protected JTextArea ta[] = new JTextArea[3];
 
@@ -396,7 +398,8 @@ public class MainView {
 		movielblP.setBounds(400, 0, 100, 381);
 		movielblP.setOpaque(false);
 
-		movie_font = new Font("돋움", Font.ITALIC, 15); 
+		movie_font = new Font("돋움", Font.ITALIC, 19); 
+		info_font = new Font("돋움", Font.PLAIN + Font.BOLD, 15); 
 
 		// infoLbl 배치
 		for(int i=0;i<3;i++){
@@ -406,7 +409,9 @@ public class MainView {
 		infoLbl[0].setText("영화제목 : ");
 		infoLbl[0].setFont(movie_font);
 		infoLbl[1].setText("장르 : ");
+		infoLbl[1].setFont(info_font);
 		infoLbl[2].setText("출연 : ");
+		infoLbl[2].setFont(info_font);
 
 
 		for(int i=0;i<3;i++){
@@ -423,14 +428,15 @@ public class MainView {
 			ta[i] = new JTextArea(15, 2);
 			ta[i].setLineWrap(true); // 자동 줄바꿈
 			ta[i].setOpaque(false);
+			ta[i].setFont(info_font);
 			movielblP_2.add(ta[i]);
 		}
 		ta[0].setFont(movie_font);
 
 		// 처음 화면에 뿌려줄 정보
         ta[0].setText(movies.get(0).getTitle());
-        ta[1].setText(movies.get(0).getGenre());
-        ta[2].setText(apiMovie.getinfo(movies.get(0).getTitle(), "actor"));
+        ta[1].setText("\n" + movies.get(0).getGenre());
+        ta[2].setText("\n\n" + apiMovie.getinfo(movies.get(0).getTitle(), "actor"));
 
 
 		moviePanel.add(movielblP_2);
@@ -442,6 +448,7 @@ public class MainView {
 
 		infoLbl[3] = new JLabel();
 		infoLbl[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
+		infoLbl[3].setFont(info_font);
 		movielblP_3.add(infoLbl[3]);
 
         infoLbl[3].setText("평점 : " + apiMovie.getinfo(movies.get(0).getTitle(), "userRating"));
@@ -458,7 +465,7 @@ public class MainView {
 
 
 		btnP_movie.setLayout(new FlowLayout());
-		btnP_movie.setBounds(300, 540, 200, 50);
+		btnP_movie.setBounds(300, 510, 200, 50);
 		btnP_movie.setOpaque(false);
 		bookBtn.setPreferredSize(new Dimension(200,50));
 		bookBtn.setIcon(bookbtn);
@@ -523,7 +530,9 @@ public class MainView {
 		infoLbl2[0].setText("영화제목 : ");
 		infoLbl2[0].setFont(movie_font);
 		infoLbl2[1].setText("장르 : ");
+		infoLbl2[1].setFont(info_font);
 		infoLbl2[2].setText("출연 : ");
+		infoLbl2[2].setFont(info_font);
 
 		for(int i=0;i<3;i++){
 			movielblP2.add(infoLbl2[i]);
@@ -540,13 +549,15 @@ public class MainView {
 			ta2[i] = new JTextArea(15, 2);
 			ta2[i].setLineWrap(true); // 자동 줄바꿈
 			ta2[i].setOpaque(false);
+			ta2[i].setFont(info_font);
 			movielblP2_2.add(ta2[i]);
 		}
 		ta2[0].setFont(movie_font);
 
+		// 추천영화 첫 화면
         ta2[0].setText(genreMovies.get(0).getTitle());
-        ta2[1].setText(genreMovies.get(0).getGenre());
-        ta2[2].setText(apiMovie.getinfo(genreMovies.get(0).getTitle(), "actor"));
+        ta2[1].setText("\n" + genreMovies.get(0).getGenre());
+        ta2[2].setText("\n\n" + apiMovie.getinfo(genreMovies.get(0).getTitle(), "actor"));
 
 		recmovPanel.add(movielblP2_2);
 
@@ -557,6 +568,7 @@ public class MainView {
 
 		infoLbl2[3] = new JLabel();
 		infoLbl2[3].setText("평점 : "); // 평점 : 8.88 이건 라벨 하나에 다 넣을 수 있겠죠!?
+		infoLbl2[3].setFont(info_font);
 
         infoLbl2[3].setText("평점 : " + apiMovie.getinfo(genreMovies.get(0).getTitle(), "userRating"));
 
@@ -575,7 +587,7 @@ public class MainView {
 
 
 		btnP_movie2.setLayout(new FlowLayout());
-		btnP_movie2.setBounds(300, 540, 200, 50);
+		btnP_movie2.setBounds(300, 510, 200, 50);
 		btnP_movie2.setOpaque(false);
 		bookBtn2.setPreferredSize(new Dimension(200, 50));
 		bookBtn2.setIcon(bookbtn);
@@ -609,7 +621,7 @@ public class MainView {
 		spiP.add(stuSpi);
 		bookPanel.add(spiP);
 
-		book_font = new Font("돋움", Font.BOLD, 25); 
+		book_font = new Font("돋움", Font.BOLD + Font.ITALIC, 25); 
 
 		titP.setLayout(new BorderLayout());
 		titP.setBounds(240, 20, 560, 80);
@@ -880,17 +892,21 @@ public class MainView {
 		payPanel.setBounds(0,100,800,600);
 		payPanel.setBackground(Color.orange);
 
-		imgP_pay.setLayout(new BorderLayout());
-		imgP_pay.setBounds(50, 20, 300, 430);
+		imgP_pay.setLayout(new FlowLayout(FlowLayout.CENTER,0,35));
+		// imgP_pay.setOpaque(false);
+		imgP_pay.setBackground(new Color(51,51,51));
+		imgP_pay.setBounds(30, 20, 310, 430);
 		imgP_pay.add(imgL_pay); // 영화 이미지 넣을 라벨 추가
 		payPanel.add(imgP_pay);
-
+		
 		infoP_pay.setLayout(new GridLayout(4,1));
+		infoP_pay.setOpaque(false);
 		infoP_pay.setBounds(400, 20, 350, 350);
 
 		// infoL_pay 라벨 배치
 		for(int i=0;i<4;i++){
 			infoL_pay[i] = new JLabel();
+			infoL_pay[i].setFont(info_font);
 		}
 		infoL_pay[0].setText("티켓 수 : 성인 " + aduN +"명, 청소년 " + stuN +"명");
 		infoL_pay[1].setText("팝콘 : ");
@@ -906,11 +922,16 @@ public class MainView {
 
 		// 레디오 버튼 배치
 		radioP_pay.setLayout(new GridLayout(1,3));
+		radioP_pay.setOpaque(false);
 		radioP_pay.setBounds(400, 360, 350, 90);
+		
+		info_font2 = new Font("돋움", Font.PLAIN + Font.ITALIC + Font.BOLD, 15); 
 
 		for(int i=0;i<3;i++){
 			group.add(rb[i]);
 			radioP_pay.add(rb[i]);
+			rb[i].setFont(info_font2);
+			rb[i].setOpaque(false);
 		}
 
 		payPanel.add(radioP_pay);
@@ -1028,6 +1049,8 @@ public class MainView {
 		for(int i=0; i<50; i++) tBtn[i].addActionListener(listener);
 		for(int i=0; i<3; i++) rb[i].addActionListener(listener);
 		btnHelp.addActionListener(listener);
+		detailBtn.addActionListener(listener);
+		detailBtn2.addActionListener(listener);
 		exitButton.addActionListener(listener);
 
 	}
