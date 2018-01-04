@@ -444,7 +444,7 @@ public class MainView {
 
 
 		btnP_movie.setLayout(new FlowLayout());
-		btnP_movie.setBounds(300, 540, 200, 50);
+		btnP_movie.setBounds(300, 510, 200, 50);
 		btnP_movie.setOpaque(false);
 		bookBtn.setPreferredSize(new Dimension(200,50));
 		bookBtn.setIcon(bookbtn);
@@ -553,7 +553,7 @@ public class MainView {
 
 
 		btnP_movie2.setLayout(new FlowLayout());
-		btnP_movie2.setBounds(300, 540, 200, 50);
+		btnP_movie2.setBounds(300, 510, 200, 50);
 		btnP_movie2.setOpaque(false);
 		bookBtn2.setPreferredSize(new Dimension(200, 50));
 		bookBtn2.setIcon(bookbtn);
