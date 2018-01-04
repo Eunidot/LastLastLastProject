@@ -228,6 +228,9 @@ public class MyActionListener {
                 ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
                 ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
                 mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+
+                mainView.btnMovie.setEnabled(false);
+                mainView.btnRecmov.setEnabled(false);
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -273,6 +276,11 @@ public class MyActionListener {
                 mainView.infoL_pay[3].setText("* 총 결제 금액 : " + String.valueOf(allPrice) + "원");
                 mainView.infoL_pay[0].setText("티켓 수 : 성인 " + aultTiketnum +"명, 청소년 " + studentTiketnum +"명");
                 mainView.card.show(mainView.tab, "pay");
+
+                mainView.btnMovie.setEnabled(false);
+                mainView.btnRecmov.setEnabled(false);
+                mainView.btnSnack.setEnabled(false);
+                mainView.btnPay.setEnabled(true);
             }
             // 매점 탭에서 건너뛰기 버튼 클릭 시
             else if(obj == mainView.btn_snack[1]) {
@@ -289,11 +297,24 @@ public class MyActionListener {
             // 결제 탭에서 결제하기 버튼 클릭 시
             else if(obj == mainView.btn_pay[0]) {
                 mainView.diaSuc.setVisible(true);
+
                 mainView.card.show(mainView.tab, "movie");
+
+                // 탭을 초기 상태로 변경
+                mainView.btnMovie.setEnabled(true);
+                mainView.btnRecmov.setEnabled(true);
+                mainView.btnSnack.setEnabled(true);
+                mainView.btnPay.setEnabled(false);
             }
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
                 mainView.card.show(mainView.tab, "movie");
+
+                // 탭을 초기 상태로 변경
+                mainView.btnMovie.setEnabled(true);
+                mainView.btnRecmov.setEnabled(true);
+                mainView.btnSnack.setEnabled(true);
+                mainView.btnPay.setEnabled(false);
             }
             // 좌석 선택하는 좌석 버튼들
             else if(Istogglebtn(obj)) {
