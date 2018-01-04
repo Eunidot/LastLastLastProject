@@ -226,7 +226,7 @@ public class MyActionListener {
             }
             // 영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn) {
-                mainView.card.show(mainView.tab, "book");
+                    mainView.card.show(mainView.tab, "book");
             }
             // 추천 영화 탭 클릭
             else if(obj == mainView.btnRecmov) {
@@ -239,24 +239,26 @@ public class MyActionListener {
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
-                mainView.card.show(mainView.tab, "snack");
-                String str=seatselect[0];
-                for(int i=1;i<4;i++) {
-                    if(seatselect[i]==null) continue;
-                    str=str+","+seatselect[i];
-                }
-                ticket.setCutomername(customer.id);
-                ticket.setSeletseat(str);
-                ticket.setTotalnum((int)mainView.aduSpi.getValue()+(int)mainView.stuSpi.getValue());
-                ticket.setTotalprice((int)mainView.aduSpi.getValue()*10000+(int)mainView.stuSpi.getValue()*7000);
-                ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
-                mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
-                for (int j=0;j<seatselect.length;j++){
-                    seatDAO.setSelectedSeat(seatselect[j]);
-                }
+                    Reservation();
+                    /*mainView.card.show(mainView.tab, "snack");
+                    String str = seatselect[0];
+                    for (int i = 1; i < 4; i++) {
+                        if (seatselect[i] == null) continue;
+                        str = str + "," + seatselect[i];
+                    }
+                    ticket.setCutomername(customer.id);
+                    ticket.setSeletseat(str);
+                    ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
+                    ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
+                    ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+                    mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+                    for (int j = 0; j < seatselect.length; j++) {
+                        seatDAO.setSelectedSeat(seatselect[j]);
+                    }
 
-                mainView.btnMovie.setEnabled(false);
-                mainView.btnRecmov.setEnabled(false);
+                    mainView.btnMovie.setEnabled(false);
+                    mainView.btnRecmov.setEnabled(false);*/
+
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -270,6 +272,7 @@ public class MyActionListener {
                     mainView.tBtn[l].setEnabled(true);
                 }
             }
+
             // 매점 탭 클릭시
             else if(obj == mainView.btnSnack) {
                 mainView.card.show(mainView.tab, "snack");
@@ -616,7 +619,26 @@ public class MyActionListener {
             js.setValue(0);
         }
     }
+    public synchronized void Reservation() {
+        mainView.card.show(mainView.tab, "snack");
+        String str = seatselect[0];
+        for (int i = 1; i < 4; i++) {
+            if (seatselect[i] == null) continue;
+            str = str + "," + seatselect[i];
+        }
+        ticket.setCutomername(customer.id);
+        ticket.setSeletseat(str);
+        ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
+        ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
+        ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+        mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+        for (int j = 0; j < seatselect.length; j++) {
+            seatDAO.setSelectedSeat(seatselect[j]);
+        }
 
+        mainView.btnMovie.setEnabled(false);
+        mainView.btnRecmov.setEnabled(false);
+    }
     public void LoginListenerSet() {
         loginView.addListenerLogin(lL);
     } //ListenerSet()
