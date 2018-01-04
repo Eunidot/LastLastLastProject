@@ -154,7 +154,8 @@ public class MainView {
 	protected ImageIcon screen = new ImageIcon("src/com/company/img/screen.png"); 
 	protected ImageIcon selbtn = new ImageIcon("src/com/company/img/select.png"); 
 	protected ImageIcon cancel_book = new ImageIcon("src/com/company/img/cancel_book.png"); 
-
+	protected ImageIcon toggle_btn = new ImageIcon("src/com/company/img/seat2.png");
+	protected ImageIcon toggle_btn1 = new ImageIcon("src/com/company/img/그림6.png");
 
 	// 매점 패널
 	private JPanel snackPanel = new JPanel(){
@@ -681,7 +682,7 @@ public class MainView {
 
 		seatP.setLayout(new GridLayout(5,10));
 		seatP.setBounds(40, 220, 760, 310);
-		seatP.setBackground(Color.blue);
+		//seatP.setBackground(Color.blue);
 		// tBtn 배치
 		for(int i=0;i<50;i++){
 			tBtn[i] = new JToggleButton();
@@ -691,8 +692,16 @@ public class MainView {
 			else if(i/10==2) {tBtn[i].setText("C"+(i%10+1));}
 			else if(i/10==3) {tBtn[i].setText("D"+(i%10+1));}
 			else if(i/10==4) {tBtn[i].setText("E"+(i%10+1));}
+
 			tBtn[i].setEnabled(false);
-			tBtn[i].setForeground(Color.black);
+			if(AppManager.getInstance().getDAOManager().getSeatDAO().getBooking(tBtn[i].getText())==1) {
+				tBtn[i].setForeground(Color.RED);
+				tBtn[i].setText("X");
+			}
+			else {
+				tBtn[i].setForeground(Color.black);
+			}
+
 		}
 
 
