@@ -1,3 +1,5 @@
+package com.company;
+
 public class Message {
     private String id;
     private String password;

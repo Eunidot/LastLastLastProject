@@ -1,5 +1,6 @@
 package com.company;
 
+import com.google.gson.Gson;
 import javafx.scene.control.Spinner;
 
 import javax.swing.*;
@@ -7,9 +8,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.SQLOutput;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class MyActionListener {
+public class MyActionListener extends Thread{
     LoginView loginView = new LoginView();
     DataManager dataManager = new DataManager();
     Customer customer = new Customer();
@@ -40,6 +48,48 @@ public class MyActionListener {
 
     APIMovie apiMovie = new APIMovie();
 
+    ChatData data = new ChatData();
+    Socket socket;
+    BufferedReader inMsg;
+    PrintWriter outMsg;
+    Gson gson=new Gson();
+    Message m;
+    boolean status;
+    Thread thread;
+    String id;
+
+    //서버와 연결
+    public void connectServer ()  {
+        try {
+            socket = new Socket("127.0.0.1",8437);
+            System.out.println("클라이언트 연결 성공");
+            inMsg = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outMsg = new PrintWriter(socket.getOutputStream(),true);
+            id=customer.getId();
+            m = new Message(id,"","","입장"); //로그인 할 때 아이디와 타입을 로그인으로 메세지 객체 초기화
+
+            outMsg.println(gson.toJson(m)); //위의 값을 출력스트림으로 가져옴
+            thread = new Thread(this);
+            thread.start(); //클라이언트 시작
+
+        }   catch (Exception e3) {
+            System.out.println("connectError");
+        }
+    }
+    public void run() {
+        String msg;
+        status =true;
+
+        while (status) {
+            try {
+                msg = inMsg.readLine(); //입력스트림에 입력된 한 줄 읽이옴
+                m=gson.fromJson(msg,Message.class); //읽어온 메세지를 Message.class형태로 파싱
+                data.refreshData(m.getId()+">"+m.getMsg()+"\n");//메세지를 입력한 클라이언트 아이디와 메세지출력
+                mainView.msgOut.setCaretPosition(mainView.msgOut.getDocument().getLength());
+            }  catch (Exception e2) { System.out.println("run Error");}
+        }
+    }
+   // ------------------------------------------------------------------------------------------------------------------
     public MyActionListener() {
         AppManager.getInstance().setMyactionListener(this);
     }
@@ -56,6 +106,7 @@ public class MyActionListener {
                 if(customerDAO.login()){
                     // 메인 뷰 보여주기
                     mainView = new MainView();
+                    data.addObj(mainView.msgOut);
                     MainViewListenerSet();
                     JSpinnerChangeListenerSet();
                 }
@@ -139,9 +190,14 @@ public class MyActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             Object obj = e.getSource();
+            // 채팅메세지 입력
+            if(obj == mainView.msgInput) {
+                outMsg.println(gson.toJson(new Message(id,"",mainView.msgInput.getText(),"msg")));
+                mainView.msgInput.setText("");
+            }
 
             // 영화패널 > 버튼
-            if(obj == mainView.nextBtn) {
+            else if(obj == mainView.nextBtn) {
                 mainView.mIdx++;
                 // 영화 끝으로 도달했을때 다시 처음으로 돌리기
                 if(mainView.mIdx == mainView.movies.size())
@@ -239,26 +295,19 @@ public class MyActionListener {
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
-                    Reservation();
-                    /*mainView.card.show(mainView.tab, "snack");
-                    String str = seatselect[0];
-                    for (int i = 1; i < 4; i++) {
-                        if (seatselect[i] == null) continue;
-                        str = str + "," + seatselect[i];
+                String str = seatselect[0];
+                boolean pass = true;
+                for (int i = 1; i < 4; i++) {
+                    if (seatselect[i] == null) continue;
+                    str = str + "," + seatselect[i];
+                }
+                for(int j=0;j<seatselect.length;j++) {
+                    if (seatDAO.getBooking(seatselect[j])==1) {
+                        System.out.println("이미 예매 된 좌석입니다");
+                        pass = false;
                     }
-                    ticket.setCutomername(customer.id);
-                    ticket.setSeletseat(str);
-                    ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
-                    ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
-                    ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
-                    mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
-                    for (int j = 0; j < seatselect.length; j++) {
-                        seatDAO.setSelectedSeat(seatselect[j]);
-                    }
-
-                    mainView.btnMovie.setEnabled(false);
-                    mainView.btnRecmov.setEnabled(false);*/
-
+                }
+                if (pass==true) {Reservation(str);}
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
@@ -348,11 +397,22 @@ public class MyActionListener {
             }
             // 고객센터 탭 클릭시
             else if(obj == mainView.btnHelp) {
+                connectServer(); //서버와 연결
             	mainView.diaHelp.setVisible(true);
             }
             // 고객센터 탭에서 종료 버튼 클릭 시
             else if(obj == mainView.exitButton) {
+                //종료했다는 것을 서버에 알림
+                outMsg.println(gson.toJson(new Message(id, "", "", "종료")));
             	mainView.diaHelp.dispose();
+                outMsg.close();
+                try {
+                    inMsg.close();
+                    socket.close();
+                } catch (Exception ex) {
+                    System.out.println("Error");
+                }
+                status = false;
             }
             // 좌석 선택하는 좌석 버튼들
             else if(Istogglebtn(obj)) {
@@ -619,13 +679,9 @@ public class MyActionListener {
             js.setValue(0);
         }
     }
-    public synchronized void Reservation() {
+    public synchronized void Reservation(String str) {
         mainView.card.show(mainView.tab, "snack");
-        String str = seatselect[0];
-        for (int i = 1; i < 4; i++) {
-            if (seatselect[i] == null) continue;
-            str = str + "," + seatselect[i];
-        }
+
         ticket.setCutomername(customer.id);
         ticket.setSeletseat(str);
         ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
