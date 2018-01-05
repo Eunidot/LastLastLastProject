@@ -1051,6 +1051,7 @@ public class MainView {
 		detailBtn.addActionListener(listener);
 		detailBtn2.addActionListener(listener);
 		exitButton.addActionListener(listener);
+		msgInput.addActionListener(listener);
 
 	}
 
