@@ -8,7 +8,6 @@ public class DataManager {
     private Customer m_customer;
     private Movie m_movie;
     private Payment m_payment;
-    private Reservation m_reservation;
     private Seat m_seat;
     private Snack m_snack;
     private SnackOrder m_snackOrder;
@@ -26,9 +25,6 @@ public class DataManager {
     }
     public void setPayment (Payment payment) {
         m_payment = payment;
-    }
-    public void setReservation (Reservation reservation) {
-        m_reservation = reservation;
     }
     public void setSeat (Seat seat) {
         m_seat = seat;
@@ -51,9 +47,6 @@ public class DataManager {
     }
     public Payment getPayment() {
         return m_payment;
-    }
-    public Reservation getReservation() {
-        return m_reservation;
     }
     public Seat getSeat() {
         return m_seat;

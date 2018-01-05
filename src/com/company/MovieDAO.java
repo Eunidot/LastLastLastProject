@@ -30,8 +30,6 @@ public class MovieDAO {
                 Movie movie = new Movie();
                 movie.setTitle(rs.getString("title"));
                 movie.setGenre(rs.getString("genre"));
-                movie.setActor(rs.getString("actor"));
-                movie.setPlot(rs.getString("plot"));
                 movies.add(movie);
             }
             daoManager.closeDB();
@@ -86,8 +84,6 @@ public class MovieDAO {
                 Movie movie = new Movie();
                 movie.setTitle(rs.getString("title"));
                 movie.setGenre(rs.getString("genre"));
-                movie.setActor(rs.getString("actor"));
-                movie.setPlot(rs.getString("plot"));
                 movies.add(movie);
             }
             rs.close();
@@ -119,8 +115,6 @@ public class MovieDAO {
                 Movie movie = new Movie();
                 movie.setTitle(rs.getString("title"));
                 movie.setGenre(rs.getString("genre"));
-                movie.setActor(rs.getString("actor"));
-                movie.setPlot(rs.getString("plot"));
                 movies.add(movie);
             }
             daoManager.closeDB();

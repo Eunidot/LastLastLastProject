@@ -18,6 +18,7 @@ import java.net.URL;
 
 import static javafx.concurrent.Worker.State.FAILED;
 
+// 자세히를 클릭하여 영화에 대한 자세한 정보를 볼 수 있게 해주기 위한 클래스
 public class DetailFrame extends JFrame {
 
     private final JFXPanel jfxPanel = new JFXPanel();
@@ -36,7 +37,7 @@ public class DetailFrame extends JFrame {
         initComponents();
     }
 
-
+    // 전체적인 화면 구성
     private void initComponents() {
         createScene();
 
@@ -47,9 +48,11 @@ public class DetailFrame extends JFrame {
             }
         };
 
+        // 리스너를 add해줌
         btnGo.addActionListener(al);
         txtURL.addActionListener(al);
 
+        // 프로그래스 바 설정
         progressBar.setPreferredSize(new Dimension(150, 18));
         progressBar.setStringPainted(true);
 
@@ -74,6 +77,7 @@ public class DetailFrame extends JFrame {
 
     }
 
+    // 패널에 웹뷰를 띄워줌
     private void createScene() {
 
         Platform.runLater(new Runnable() {
@@ -138,7 +142,8 @@ public class DetailFrame extends JFrame {
                             public void changed(ObservableValue<? extends Throwable> o, Throwable old, final Throwable value) {
                                 if (engine.getLoadWorker().getState() == FAILED) {
                                     SwingUtilities.invokeLater(new Runnable() {
-                                        @Override public void run() {
+                                        @Override
+                                        public void run() {
                                             JOptionPane.showMessageDialog(
                                                     panel,
                                                     (value != null) ?
@@ -157,6 +162,7 @@ public class DetailFrame extends JFrame {
         });
     }
 
+    // 주소를 입력해 홈페이지를 로드함
     public void loadURL(final String url) {
         Platform.runLater(new Runnable() {
             @Override
@@ -172,6 +178,7 @@ public class DetailFrame extends JFrame {
         });
     }
 
+    //URL을 문자열로 반환함
     private static String toURL(String str) {
         try {
             return new URL(str).toExternalForm();
@@ -180,7 +187,8 @@ public class DetailFrame extends JFrame {
         }
     }
 
-    public static void start(String url){
+    // 자세히 버튼을 클릭시 받은 url의 프레임창을 띄움
+    public static void start(String url) {
         SwingUtilities.invokeLater(new Runnable() {
 
             public void run() {
@@ -190,15 +198,4 @@ public class DetailFrame extends JFrame {
             }
         });
     }
-/*
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                DetailFrame browser = new DetailFrame();
-                browser.setVisible(true);
-                browser.loadURL("http://oracle.com");
-            }
-        });
-    }*/
 }

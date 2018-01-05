@@ -8,6 +8,7 @@ public class AppManager {
     private MyActionListener m_myactionlistener;
     private MainView m_mainView;
 
+    // 싱글톤 패턴
     public static AppManager getInstance(){
         if(appManager == null)
             appManager = new AppManager();
@@ -35,5 +36,3 @@ public class AppManager {
 
     public MainView getMainView() { return m_mainView; }
 }
-
-// 푸쉬용
