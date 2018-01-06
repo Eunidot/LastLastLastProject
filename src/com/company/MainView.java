@@ -694,7 +694,6 @@ public class MainView {
 
 			tBtn[i].setEnabled(false);
 			if(AppManager.getInstance().getDAOManager().getSeatDAO().getBooking(tBtn[i].getText())==1) {
-				tBtn[i].setForeground(Color.RED);
 				tBtn[i].setText("X");
 			}
 			else {
