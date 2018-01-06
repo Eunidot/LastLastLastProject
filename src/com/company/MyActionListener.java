@@ -284,15 +284,17 @@ public class MyActionListener extends Thread{
             // 영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn) {
                     mainView.card.show(mainView.tab, "book");
+                    curMovie = mainView.movies.get(mainView.mIdx);
             }
             // 추천 영화 탭 클릭
             else if(obj == mainView.btnRecmov) {
-                curMovie = mainView.genreMovies.get(mainView.genreIdx);
                 mainView.card.show(mainView.tab, "recmovie");
+                curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
             // 추천영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn2) {
                 mainView.card.show(mainView.tab, "book");
+                curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
@@ -321,6 +323,15 @@ public class MyActionListener extends Thread{
                     if(mainView.tBtn[l].getText().equals("X")) continue;
                     mainView.tBtn[l].setEnabled(true);
                 }
+
+                // 영화탭 화면을 초기화면으로 설정
+                mainView.ta[0].setText(mainView.movies.get(0).getTitle());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(0).getGenre());
+                mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "actor"));
+                mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "userRating"));
+                curMovie = mainView.movies.get(0);
+                mainView.mIdx=0;
+
             }
 
             // 매점 탭 클릭시
@@ -436,14 +447,20 @@ public class MyActionListener extends Thread{
                 mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "actor"));
                 mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "userRating"));
 */
-                curMovie = mainView.genreMovies.get(mainView.mIdx);
+                curMovie = mainView.movies.get(mainView.mIdx);
+                mainView.mIdx=0;
 
 
             }
             // 고객센터 탭 클릭시
             else if(obj == mainView.btnHelp) {
                 connectServer(); //서버와 연결
-            	mainView.diaHelp.setVisible(true);
+                mainView.diaHelp.setVisible(true);
+
+                // 만약 첫 화면에서 고객센터 탭을 클릭 한다면...
+                if(curMovie.getTitle() == null){
+                    curMovie = mainView.movies.get(0);
+                }
             }
             // 고객센터 탭에서 종료 버튼 클릭 시
             else if(obj == mainView.exitButton) {
