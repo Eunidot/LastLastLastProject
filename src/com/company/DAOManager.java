@@ -28,7 +28,7 @@ public class DAOManager {
             Class.forName(jdbcDriver);
 
 
-            conn = DriverManager.getConnection(jdbcUrl, "root", "1111");
+            conn = DriverManager.getConnection(jdbcUrl, "", "");
 
         }catch (Exception e){
             e.printStackTrace();
