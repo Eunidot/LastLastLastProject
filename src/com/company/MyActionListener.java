@@ -289,11 +289,20 @@ public class MyActionListener extends Thread{
                     mainView.card.show(mainView.tab, "book");
                     curMovie = mainView.movies.get(mainView.mIdx);
             }
+
             // 추천 영화 탭 클릭
             else if(obj == mainView.btnRecmov) {
                 mainView.card.show(mainView.tab, "recmovie");
-                curMovie = mainView.genreMovies.get(mainView.genreIdx);
+
+                // 추천 영화 탭 초기화
+                curMovie = mainView.genreMovies.get(0);
+
+                mainView.ta2[0].setText(mainView.genreMovies.get(0).getTitle());
+                mainView.ta2[1].setText("\n\n" + mainView.genreMovies.get(0).getGenre());
+                mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "actor"));
+                mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "userRating"));
             }
+
             // 추천영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn2) {
                 PayingSeat();
@@ -384,6 +393,8 @@ public class MyActionListener extends Thread{
                 mainView.btnRecmov.setEnabled(false);
                 mainView.btnSnack.setEnabled(false);
                 mainView.btnPay.setEnabled(true);
+
+                mainView.btn_snack[0].setEnabled(false);
             }
             // 매점 탭에서 건너뛰기 버튼 클릭 시
             else if(obj == mainView.btn_snack[1]) {
@@ -396,11 +407,14 @@ public class MyActionListener extends Thread{
                 mainView.btnSnack.setEnabled(false);
                 mainView.btnPay.setEnabled(true);
 
+                mainView.btn_snack[0].setEnabled(false);
             }
+
             // 결제 탭 클릭시
             else if(obj == mainView.btnPay) {
                 mainView.card.show(mainView.tab, "pay");
             }
+
             // 결제 탭에서 결제하기 버튼 클릭 시
             else if(obj == mainView.btn_pay[0]) {
                 mainView.diaSuc.setVisible(true);
@@ -455,6 +469,11 @@ public class MyActionListener extends Thread{
                 mainView.ta2[2].setText("\n\n" + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "actor"));
                 mainView.infoLbl2[3].setText("평점 : " + apiMovie.getinfo(mainView.genreMovies.get(0).getTitle(), "userRating"));
 
+
+                // 초기 메인화면 초기화
+                mainView.mIdx=0;
+                curMovie = mainView.movies.get(0);
+
                 // 매점 초기화
                 for(int i=0;i<4;i++){
                     mainView.menu2[i].setValue(0);
@@ -465,7 +484,11 @@ public class MyActionListener extends Thread{
                 // 구입 가격 초기화
                 allPrice = 0;
 
+                // 문자열 초기화
+                bString = "음료 : ";
+                pString = "팝콘 : ";
             }
+
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
                 for(int i=0; i<paying.size();i++) {
@@ -494,17 +517,33 @@ public class MyActionListener extends Thread{
                 mainView.btnRecmov.setEnabled(true);
                 mainView.btnSnack.setEnabled(true);
                 mainView.btnPay.setEnabled(false);
-/*
+
+                //  영화 탭 화면 초기화
                 mainView.ta[0].setText(mainView.movies.get(0).getTitle());
-                mainView.ta[1].setText("\n" + mainView.movies.get(0).getGenre());
+                mainView.ta[1].setText("\n\n" + mainView.movies.get(0).getGenre());
                 mainView.ta[2].setText("\n\n" + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "actor"));
                 mainView.infoLbl[3].setText("평점 : " + apiMovie.getinfo(mainView.movies.get(0).getTitle(), "userRating"));
-*/
-                curMovie = mainView.movies.get(mainView.mIdx);
-                mainView.mIdx=0;
 
+                mainView.mIdx=0;
+                curMovie = mainView.movies.get(0);
+
+
+                // 매점 초기화
+                for(int i=0;i<4;i++){
+                    mainView.menu2[i].setValue(0);
+                    mainView.menu4[i].setValue(0);
+                    mainView.menu6[i].setValue(0);
+                }
+
+                // 구입 가격 초기화
+                allPrice = 0;
+
+                // 문자열 초기화
+                bString = "";
+                pString = "";
 
             }
+
             // 고객센터 탭 클릭시
             else if(obj == mainView.btnHelp) {
                 connectServer(); //서버와 연결
@@ -515,6 +554,7 @@ public class MyActionListener extends Thread{
                     curMovie = mainView.movies.get(0);
                 }
             }
+
             // 고객센터 탭에서 종료 버튼 클릭 시
             else if(obj == mainView.exitButton) {
                 //종료했다는 것을 서버에 알림
@@ -529,6 +569,7 @@ public class MyActionListener extends Thread{
                 }
                 status = false;
             }
+
             // 좌석 선택하는 좌석 버튼들
             else if(Istogglebtn(obj)) {
                 int selectcount =0; //버튼을 선택 한 개수
@@ -568,8 +609,13 @@ public class MyActionListener extends Thread{
             for(int i=0;i<3;i++){
                 if(mainView.rb[i].isSelected()){
                     mainView.btn_pay[0].setEnabled(true);
+                    break;
                 }
+                else
+                    mainView.btn_pay[0].setEnabled(false);
             }
+
+
 
             mainView.titLbl.setText(curMovie.getTitle());
             mainView.movieTitle1 = curMovie.getTitle();
@@ -589,6 +635,7 @@ public class MyActionListener extends Thread{
         public void stateChanged(ChangeEvent e) {
             Object obj = e.getSource();
             int allprice = ticket.getTotalprice();
+            int snackAllPrice = 0;
 
             // 성인 예매티켓 개수 버튼
             if(obj == mainView.aduSpi) {
@@ -747,15 +794,16 @@ public class MyActionListener extends Thread{
             }
 
             // 현재 선택한 메뉴의 총 가격
-            for(int i=0;i<12;i++) allprice = allprice + sum[i];
+            for(int i=0;i<12;i++) snackAllPrice = snackAllPrice + sum[i];
 
             // 1개 이상 메뉴 선택시 확인 버튼 활성화
-            if(allprice > 0 )
+            if(snackAllPrice > 0 )
                 mainView.btn_snack[0].setEnabled(true);
             else
                 mainView.btn_snack[0].setEnabled(false);
 
 
+            allprice += snackAllPrice;
             mainView.currentPay.setText("현재 금액 : " + allprice + " 원");
             allPrice = allprice;
 
