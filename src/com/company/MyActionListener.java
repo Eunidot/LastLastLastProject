@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +41,7 @@ public class MyActionListener extends Thread{
     int aultTiketnum = 0;
     int studentTiketnum = 0;
     String[] seatselect = new String[4];
+    ArrayList<Ticket> paying = new ArrayList<Ticket>();
 
     Movie curMovie = new Movie();
 
@@ -179,7 +181,7 @@ public class MyActionListener extends Thread{
     //------------------------------------------------------------------------------------------------메인 뷰에서의 액션리스너
     class MainViewActionL implements ActionListener {
 
-        // 어떤 버튼에서 액션이 일어났는지 알기위해 obj를 받아와 for문으로 비교해가며 찾음
+        // 어떤 좌석버튼에서 액션이 일어났는지 알기위해 obj를 받아와 for문으로 비교해가며 찾음
         public boolean Istogglebtn (Object obj) {
             boolean flag = false;
             for(int j=0; j<50;j++) {
@@ -283,6 +285,7 @@ public class MyActionListener extends Thread{
             }
             // 영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn) {
+                    PayingSeat();
                     mainView.card.show(mainView.tab, "book");
                     curMovie = mainView.movies.get(mainView.mIdx);
             }
@@ -293,35 +296,44 @@ public class MyActionListener extends Thread{
             }
             // 추천영화 탭에서 예매하기 버튼 클릭시
             else if(obj == mainView.bookBtn2) {
+                PayingSeat();
                 mainView.card.show(mainView.tab, "book");
                 curMovie = mainView.genreMovies.get(mainView.genreIdx);
             }
             // 예매 화면에서 선택 버튼 클릭 시
             else if(obj == mainView.btn_book[0]) {
+                //선택된 좌석들 str에 연속 이어붙임 ex)A1,A2
                 String str = seatselect[0];
                 boolean pass = true;
                 for (int i = 1; i < 4; i++) {
+                    //총4자리를 선택하지 않았을 경우 null값 처리
                     if (seatselect[i] == null) continue;
                     str = str + "," + seatselect[i];
                 }
+                //선택한 좌석들이 이미 결제 진행중인 좌석인지 확인
                 for(int j=0;j<seatselect.length;j++) {
-                    if (seatDAO.getBooking(seatselect[j])==1) {
-                        System.out.println("이미 예매 된 좌석입니다");
+                    if (seatDAO.getBooking(seatselect[j])==2) {
+                        System.out.println("이미 결재중인 좌석입니다");
                         pass = false;
                     }
                 }
-                if (pass==true) {Reservation(str);}
+                //이미 결제중인 좌석이 아닐경우 결제 진행
+                if (pass==true) {
+                    Reservation(str);
+                    PayingSeat();
+                }
             }
             // 예매 화면에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_book[1]) {
                 mainView.card.show(mainView.tab, "movie");
+                //취소했을 경우 선택했던 예매하기화면 초기화
                 mainView.btn_book[0].setEnabled(false);
                 mainView.aduSpi.setValue(0);
                 mainView.stuSpi.setValue(0);
+                mainView.aduSpi.setEnabled(true);
+                mainView.stuSpi.setEnabled(true);
                 for(int l=0;l<50;l++) {
                     mainView.tBtn[l].setSelected(false);
-                    if(mainView.tBtn[l].getText().equals("X")) continue;
-                    mainView.tBtn[l].setEnabled(true);
                 }
 
                 // 영화탭 화면을 초기화면으로 설정
@@ -393,6 +405,28 @@ public class MyActionListener extends Thread{
             else if(obj == mainView.btn_pay[0]) {
                 mainView.diaSuc.setVisible(true);
 
+                //리스트에 있는 애들중 결제 버튼을 누른  회원 아이디 비교해서 맞으면 넣음
+                for(int i=0; i<paying.size();i++) {
+                    if(customer.getId().equals(paying.get(i).getCutomername())){
+                        ticketDAO.newTicket(paying.get(i));
+                        String[] st = paying.get(i).getSeletseat().split(",");
+                        for (int j=0;j<st.length;j++){
+                            seatDAO.setSelectedSeat(st[j]);
+                        }
+                        paying.remove(i);
+                    }
+                }
+                PayFinish();
+                // 영화 예매하기화면 초기화
+                mainView.btn_book[0].setEnabled(false);
+                mainView.aduSpi.setValue(0);
+                mainView.stuSpi.setValue(0);
+                mainView.aduSpi.setEnabled(true);
+                mainView.stuSpi.setEnabled(true);
+                for(int l=0;l<50;l++) {
+                    mainView.tBtn[l].setSelected(false);
+                }
+
                 mainView.card.show(mainView.tab, "movie");
 
                 // 탭을 초기 상태로 변경
@@ -434,7 +468,26 @@ public class MyActionListener extends Thread{
             }
             // 결제 탭에서 취소 버튼 클릭 시
             else if(obj == mainView.btn_pay[1]) {
+                for(int i=0; i<paying.size();i++) {
+                    if(customer.getId().equals(paying.get(i).getCutomername())){
+                        String[] st = paying.get(i).getSeletseat().split(",");
+                        for (int j=0;j<st.length;j++){
+                            seatDAO.setPayCancel(st[j]);
+                        }
+                        paying.remove(i);
+                    }
+                }
+                PayCancel();
                 mainView.card.show(mainView.tab, "movie");
+                // 영화 예매하기화면 초기화
+                mainView.btn_book[0].setEnabled(false);
+                mainView.aduSpi.setValue(0);
+                mainView.stuSpi.setValue(0);
+                mainView.aduSpi.setEnabled(true);
+                mainView.stuSpi.setEnabled(true);
+                for(int l=0;l<50;l++) {
+                    mainView.tBtn[l].setSelected(false);
+                }
 
                 // 탭을 초기 상태로 변경
                 mainView.btnMovie.setEnabled(true);
@@ -496,6 +549,7 @@ public class MyActionListener extends Thread{
                             }
                         }
                     }
+                    // 선택한 총 티켓 만큼 좌석 선택을 하지 않았을때
                     else if (selectcount<(aultTiketnum+studentTiketnum)) {
                         mainView.btn_book[0].setEnabled(false);
                         mainView.stuSpi.setEnabled(true);
@@ -542,7 +596,7 @@ public class MyActionListener extends Thread{
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 aultTiketnum = (int)mainView.aduSpi.getValue();
                 for(int j=0;j<50;j++) {
-                    if(mainView.tBtn[j].getText().equals("X")) continue;
+                    if(mainView.tBtn[j].getText().equals("X") || mainView.tBtn[j].getForeground().equals(Color.RED)) continue;
                     mainView.tBtn[j].setEnabled(true);
                 }
                 //0이하로 내려가지 않게 함
@@ -566,7 +620,7 @@ public class MyActionListener extends Thread{
                 hap=(int)mainView.stuSpi.getNextValue()+(int)mainView.aduSpi.getNextValue();
                 studentTiketnum = (int)mainView.stuSpi.getValue();
                 for(int j=0;j<50;j++) {
-                    if(mainView.tBtn[j].getText().equals("X")) continue;
+                    if(mainView.tBtn[j].getText().equals("X")|| mainView.tBtn[j].getForeground().equals(Color.RED)) continue;
                     mainView.tBtn[j].setEnabled(true);
                 }
                 //0이하로 내려가지 않게
@@ -741,21 +795,49 @@ public class MyActionListener extends Thread{
             js.setValue(0);
         }
     }
+    //선택눌렀을 때 결제 완료되기 전 리스트로 저장 , 결제진행 중인거 booking 2로 바꿈
     public synchronized void Reservation(String str) {
         mainView.card.show(mainView.tab, "snack");
 
-        ticket.setCutomername(customer.id);
+        ticket.setCutomername(customer.getId());
         ticket.setSeletseat(str);
         ticket.setTotalnum((int) mainView.aduSpi.getValue() + (int) mainView.stuSpi.getValue());
         ticket.setTotalprice((int) mainView.aduSpi.getValue() * 10000 + (int) mainView.stuSpi.getValue() * 7000);
-        ticketDAO.newTicket(ticket); // 아이디,총명수,선택한 좌석들,총가격 DB에 저장
+        paying.add(ticket); //결제진행중인 고객의 티켓정보 리스트에 add
         mainView.currentPay.setText("현재 금액 : " + ticket.getTotalprice() + " 원");
+        //결제 진행중인 좌석처리
         for (int j = 0; j < seatselect.length; j++) {
-            seatDAO.setSelectedSeat(seatselect[j]);
+            seatDAO.setPayingSeat(seatselect[j]);
         }
 
         mainView.btnMovie.setEnabled(false);
         mainView.btnRecmov.setEnabled(false);
+    }
+    //아직 결제되지 않았지만 결제 진행중인 좌석 처리
+    public void PayingSeat() {
+        for(int i=0; i<50; i++) {
+            if(seatDAO.getBooking(mainView.tBtn[i].getText())==2) {
+                mainView.tBtn[i].setForeground(Color.RED);
+                mainView.tBtn[i].setEnabled(false);
+            }
+        }
+    }
+    //결제 완료된 좌석 처리
+    public void PayFinish() {
+        for(int i=0; i<50; i++) {
+            if(seatDAO.getBooking(mainView.tBtn[i].getText())==1) {
+                mainView.tBtn[i].setText("X");
+                mainView.tBtn[i].setEnabled(false);
+            }
+        }
+    }
+    // 결제 중 취소 처리
+    public void PayCancel() {
+        for(int i=0; i<50; i++) {
+            if(seatDAO.getBooking(mainView.tBtn[i].getText())==0) {
+                mainView.tBtn[i].setForeground(Color.BLACK);
+            }
+        }
     }
     public void LoginListenerSet() {
         loginView.addListenerLogin(lL);
